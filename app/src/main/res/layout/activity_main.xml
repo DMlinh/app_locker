@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Rank, điểm -->
+    <ImageView
+        android:id="@+id/ivRankIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="end"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/trophy"
+        android:contentDescription="Rank Icon"
+        android:clickable="true"
+        android:focusable="true" />
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvQuote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="⏰ Hôm nay bạn dành thời gian cho điều gì?"
+
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:padding="12dp"
+        android:text="@string/grant_permission"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Nhóm nút Start & Cancel -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#534D4D"
+            android:text="START"
+             />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#534D4D"
+            android:text="CANCEL"
+             />
+    </LinearLayout>
+
+    <!-- Tiêu đề thời gian -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="⏳ Thời gian chặn"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+
+    <!-- Spinner giờ + phút -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Spinner Giờ -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinnerHours"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/spinner_dropdown_bg"
+                android:backgroundTint="@color/spinner_dropdown_bg"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Giờ"
+                android:textSize="16sp"
+                android:textColor="@color/spinner_text_color"/>
+        </LinearLayout>
+
+        <!-- Spinner Phút -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinnerMinutes"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:spinnerMode="dropdown"
+                android:popupBackground="@color/spinner_dropdown_bg"
+                android:backgroundTint="@color/spinner_dropdown_bg"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Phút"
+                android:textSize="16sp"
+                android:textColor="@color/spinner_text_color"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Nút chọn ứng dụng -->
+    <Button
+        android:id="@+id/btnChooseApps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#534D4D"
+        android:text="📱 Chọn ứng dụng để chặn"
+         />
+
+    <Button
+        android:id="@+id/btnMyUsage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#534D4D"
+        android:text="📊 Thống kê thời gian sử dụng"
+         />
+
+</LinearLayout>

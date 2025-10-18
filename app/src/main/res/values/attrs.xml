@@ -1,0 +1,5 @@
+<resources>
+    <attr name="spinner_text_color" format="color" />
+    <attr name="spinner_dropdown_text_color" format="color" />
+    <attr name="spinner_dropdown_bg_color" format="color" />
+</resources>

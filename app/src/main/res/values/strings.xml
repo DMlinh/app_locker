@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">App Blocker</string>
+    <string name="grant_permission">Cấp quyền sử dụng ứng dụng</string>
+    <string name="start_button">Bắt đầu</string>
+    <string name="time_left">Còn lại: %1$d giây</string>
+    <string name="cancelled">Đã hủy!</string>
+    <string name="time_up">Hết thời gian sử dụng!</string>
+    <string name="need_usage_permission">Cần cấp quyền Usage Access</string>
+    <string name="need_accessibility_service">Cần bật Accessibility Service</string>
+    <string name="no_timer_running">Không có bộ đếm nào đang chạy!</string>
+
+    <string-array name="time_quotes">
+        <item>⏰ Thời gian là tài nguyên quý nhất của cuộc sống.</item>
+        <item>⌛ Mỗi phút trôi qua là cơ hội bạn không thể lấy lại.</item>
+        <item>💭 Hôm nay bạn dành thời gian cho điều gì ý nghĩa?</item>
+        <item>🌅 Đừng đợi, thời điểm hoàn hảo là ngay bây giờ.</item>
+        <item>🕰️ Thời gian trôi đi, nhưng kỷ niệm ở lại.</item>
+        <item>🔥 Hãy sống sao để mỗi giây đều đáng giá.</item>
+        <item>🌿 Thời gian không chờ ai, nhưng bạn có thể làm chủ nó.</item>
+        <item>🌙 Đừng chỉ đếm thời gian — hãy khiến nó đáng nhớ.</item>
+    </string-array>
+
+</resources>

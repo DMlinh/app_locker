@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <!-- 🎆 NEON THEME COLORS -->
+    <color name="neon_background">#0A0A0F</color> <!-- Đen tím nhẹ -->
+    <color name="neon_primary">#00FFFF</color> <!-- Cyan neon -->
+    <color name="neon_variant">#FF00FF</color>
+    <color name="neon_primary_dark">#00B8B8</color>
+    <color name="neon_text">#E0FFFF</color> <!-- Trắng xanh -->
+    <color name="neon_text_secondary">#80E0E0</color>
+    <color name="neon_button_glow">#00FFFF</color>
+
+    <!-- Màu cho spinner -->
+    <color name="spinner_text_color">#FFFFFF</color>
+    <color name="spinner_dropdown_text_color">#FFFFFF</color>
+    <color name="spinner_dropdown_bg">#2E2E2E</color>
+</resources>

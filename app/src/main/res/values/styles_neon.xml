@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 🌈 Style riêng cho nút Neon -->
+    <style name="Widget.AppButton.Neon" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/btn_neon</item>
+        <item name="android:textColor">@color/neon_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">@color/neon_primary</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">8</item>
+    </style>
+
+    <!-- 💡 Style riêng cho EditText Neon -->
+    <style name="Widget.AppEditText.Neon" parent="Widget.AppCompat.EditText">
+        <item name="android:backgroundTint">@color/neon_primary</item>
+        <item name="android:textColor">@color/neon_text</item>
+        <item name="android:textColorHint">@color/neon_text_secondary</item>
+    </style>
+</resources>
