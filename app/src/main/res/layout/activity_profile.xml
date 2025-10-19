@@ -2,62 +2,87 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="?android:windowBackground"
     android:gravity="center_horizontal"
+    android:background="?android:windowBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top: points / streak / rank -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- 👤 Tên người dùng -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:text="👤 Minh"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
+        android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/tvPoints"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="12dp"
-            android:textStyle="bold"
-            android:text="🎯 Điểm tập trung: 0" />
+    <!-- 🎯 Điểm + 🔥 Chuỗi -->
+    <TextView
+        android:id="@+id/tvPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎯 Điểm: 99,600 | 🔥 Chuỗi: 7 ngày"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvStreak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            android:text="🔥 Chuỗi ngày: 0" />
+    <!-- 🔥 Chuỗi riêng (ẩn để tránh lỗi Java) -->
+    <TextView
+        android:id="@+id/tvStreak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔥 Chuỗi: 7 ngày"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvRank"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold"
-            android:text="🏆 Cấp bậc: Beginner" />
-    </LinearLayout>
+    <!-- 🏆 Cấp bậc -->
+    <TextView
+        android:id="@+id/tvRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cấp bậc: Master of Focus"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold" />
+
+    <!-- 📈 Nhãn tiến trình -->
+    <TextView
+        android:id="@+id/tvProgressLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:layout_marginTop="6dp" />
+
+    <!-- 🔵 Thanh tiến trình -->
+    <ProgressBar
+        android:id="@+id/progressRank"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="250dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="6dp"
+        android:progressTint="?attr/colorPrimary"
+        android:progress="83" />
 
     <!-- Divider -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="#CCCCCC" />
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/colorPrimary"
+        android:alpha="0.3" />
 
-    <!-- Theme list (chiếm phần còn lại, có thể scroll) -->
+    <!-- 🌈 Danh sách theme -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="8dp">
 
         <LinearLayout
             android:id="@+id/themeList"
@@ -66,4 +91,5 @@
             android:layout_height="wrap_content"
             android:paddingBottom="24dp" />
     </ScrollView>
+
 </LinearLayout>

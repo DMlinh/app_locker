@@ -197,8 +197,24 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                long seconds = millisUntilFinished / 1000;
-                tvTimer.setText(getString(R.string.time_left, seconds));
+                long totalSeconds = millisUntilFinished / 1000;
+                long hours = totalSeconds / 3600;
+                long minutes = (totalSeconds % 3600) / 60;
+                long seconds = totalSeconds % 60;
+
+                String totalText;
+                if (hours > 0) {
+                    totalText = String.format(Locale.getDefault(),
+                            "Còn lại: %d giờ %d phút %d giây", hours, minutes, seconds);
+                } else if (minutes > 0) {
+                    totalText = String.format(Locale.getDefault(),
+                            "Còn lại: %d phút %d giây", minutes, seconds);
+                } else {
+                    totalText = String.format(Locale.getDefault(),
+                            "Còn lại: %d giây", seconds);
+                }
+
+                tvTimer.setText(totalText);
             }
         }.start();
     }
@@ -210,6 +226,8 @@ public class MainActivity extends BaseActivity {
             isRunning = false;
             saveBlockingState(false);
         }
+        Button btnStart = findViewById(R.id.btnStart);
+        btnStart.setEnabled(true);
     }
 
     private void updateTimeLimit() {

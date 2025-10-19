@@ -6,17 +6,32 @@
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground">
 
+    <!-- 🌈 Icon của theme -->
+    <TextView
+        android:id="@+id/tvThemeIcon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="🌑"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Tên theme -->
     <TextView
         android:id="@+id/tvThemeName"
-        android:textSize="16sp"
-        android:textStyle="bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="Dark"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
+    <!-- Icon khóa -->
     <ImageView
         android:id="@+id/ivLock"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@android:drawable/ic_lock_lock" />
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_lock"
+        android:contentDescription="@string/locked" />
 </LinearLayout>

@@ -7,6 +7,9 @@ import java.util.Calendar;
 public class GamificationManager {
     private static final String PREFS_NAME = "GamificationPrefs";
     private final SharedPreferences prefs;
+    private static final String PREF_NAME = "GamificationPrefs";
+    private static final String KEY_POINTS = "focus_points";
+    private static final String KEY_STREAK = "streak";
 
     public GamificationManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -31,7 +34,7 @@ public class GamificationManager {
     public String getRank() {
         int points = getFocusPoints();
         if (points < 100) return "Beginner";
-        else if (points < 300) return "Pro";
+        else if (points < 200) return "Pro";
         else return "Master of Focus";
     }
 
@@ -100,16 +103,55 @@ public class GamificationManager {
         putLong("last_streak_day", packed);
     }
 
+
     // Nếu bạn muốn force set streak (ví dụ fail)
     public void setStreakZero() { setStreak(0); }
 
     // --- Theme unlocks ---
-    // Quy ước: Dark mở ở 100đ, Galaxy mở ở 300đ, Neon mở ở 500đ
+    // Quy ước: Dark mở ở 100đ, Galaxy mở ở 200đ, Neon mở ở 300đ
     public boolean isLightUnlocked() { return getFocusPoints() >= 100; }
-    public boolean isGalaxyUnlocked() { return getFocusPoints() >= 300; }
-    public boolean isNeonUnlocked() { return getFocusPoints() >= 500; }
+    public boolean isGalaxyUnlocked() { return getFocusPoints() >= 200; }
+    public boolean isNeonUnlocked() { return getFocusPoints() >= 300; }
 
     // Lưu theme hiện tại (Light, Dark, Galaxy, Neon)
     public void setCurrentTheme(String theme) { putString("current_theme", theme); }
     public String getCurrentTheme() { return getString("current_theme", "Dark"); }
+
+    // --- XP Progression ---
+    public int getCurrentXPInRank() {
+        int xp = getFocusPoints();
+        if (xp < 100) return xp;             // Beginner
+        else if (xp < 200) return xp - 100;  // Pro
+        else if (xp < 300) return xp - 200;  // Master (giới hạn)
+        else return 200;                     // Max cap
+    }
+
+    public int getRequiredXPForNextRank() {
+        int xp = getFocusPoints();
+        if (xp < 100) return 100;            // Beginner -> Pro
+        else if (xp < 100) return 100;       // Pro -> Master
+        else if (xp < 200) return 100;       // Master -> max cap
+        else return 0;                       // full XP
+    }
+
+    public String getProgressText() {
+        int current = getCurrentXPInRank();
+        int required = getRequiredXPForNextRank();
+        String rank = getRank();
+        if (required == 0) return rank + " (MAX)";
+        return rank + " (" + current + "/" + required + ")";
+    }
+
+    public float getProgressPercent() {
+        int current = getCurrentXPInRank();
+        int required = getRequiredXPForNextRank();
+        if (required == 0) return 1f;
+        return (float) current / required;
+    }
+
+    public String getNextRankName() {
+        int xp = getFocusPoints();
+        if (xp < 100) return "Pro";
+        else return "Master of Focus";
+    }
 }

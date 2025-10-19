@@ -225,10 +225,10 @@ public class UsageChartActivity extends BaseActivity {
         String totalText;
         if (hours > 0) {
             totalText = String.format(Locale.getDefault(),
-                    "Total usage: %d giờ %d phút %d giây", hours, minutes, seconds);
+                    "Tổng mức sử dụng: %d giờ %d phút %d giây", hours, minutes, seconds);
         } else {
             totalText = String.format(Locale.getDefault(),
-                    "Total usage: %d phút %d giây", minutes, seconds);
+                    "Tổng mức sử dụng: %d phút %d giây", minutes, seconds);
         }
 
         tvTotalUsage.setText(totalText);
