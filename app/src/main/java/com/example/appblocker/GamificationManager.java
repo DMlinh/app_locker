@@ -2,136 +2,179 @@ package com.example.appblocker;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class GamificationManager {
     private static final String PREFS_NAME = "GamificationPrefs";
+    private static final String KEY_QUESTS = "daily_quests";
+    private static final String KEY_LAST_RESET = "last_quest_reset";
     private final SharedPreferences prefs;
-    private static final String PREF_NAME = "GamificationPrefs";
-    private static final String KEY_POINTS = "focus_points";
-    private static final String KEY_STREAK = "streak";
 
     public GamificationManager(Context context) {
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        checkAndResetDailyQuests();
     }
 
-    // --- Helpers ---
+    // === SharedPreferences Helpers ===
     private int getInt(String key, int def) { return prefs.getInt(key, def); }
     private void putInt(String key, int val) { prefs.edit().putInt(key, val).apply(); }
+    private String getString(String key, String def) { return prefs.getString(key, def); }
+    private void putString(String key, String val) { prefs.edit().putString(key, val).apply(); }
     private long getLong(String key, long def) { return prefs.getLong(key, def); }
     private void putLong(String key, long val) { prefs.edit().putLong(key, val).apply(); }
-    private void putString(String key, String val) { prefs.edit().putString(key, val).apply(); }
-    private String getString(String key, String def) { return prefs.getString(key, def); }
 
-    // --- Points & Streak ---
+    // === Focus Points ===
     public int getFocusPoints() { return getInt("focus_points", 0); }
-    private void setFocusPoints(int v) { putInt("focus_points", v); }
-    public void addPoints(int amount) { setFocusPoints(getFocusPoints() + amount); }
+    public void addPoints(int amount) { putInt("focus_points", getFocusPoints() + amount); }
 
-    public int getStreak() { return getInt("focus_streak", 0); }
-    private void setStreak(int v) { putInt("focus_streak", v); }
-
+    // === Rank ===
     public String getRank() {
         int points = getFocusPoints();
         if (points < 100) return "Beginner";
         else if (points < 200) return "Pro";
-        else return "Master of Focus";
+        else if (points < 300) return "Master of Focus";
+        else return "Legend";
     }
 
-    // --- Quest / daily mechanics ---
-    // lastQuestDay: store dayOfYear when last quest was completed
-    public boolean isQuestCompletedToday() {
-        long last = getLong("last_quest_day", 0);
-        if (last == 0) return false;
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.YEAR) == (int)(last >> 16) && c.get(Calendar.DAY_OF_YEAR) == (int)(last & 0xFFFF);
+    // === Daily Quests Management ===
+    private void checkAndResetDailyQuests() {
+        Calendar today = Calendar.getInstance();
+        int todayKey = today.get(Calendar.YEAR) * 1000 + today.get(Calendar.DAY_OF_YEAR);
+        int lastKey = (int) getLong(KEY_LAST_RESET, 0);
+
+        // 🔁 Reset nhiệm vụ mỗi ngày
+        if (todayKey != lastKey) {
+            resetDailyQuests();
+            putLong(KEY_LAST_RESET, todayKey);
+        }
     }
 
-    private void setQuestCompletedToday() {
-        Calendar c = Calendar.getInstance();
-        long packed = ((long)c.get(Calendar.YEAR) << 16) | (c.get(Calendar.DAY_OF_YEAR) & 0xFFFF);
-        putLong("last_quest_day", packed);
+    /** 🔹 Lưu danh sách quest (JSONArray) */
+    private void saveDailyQuests(JSONArray quests) {
+        putString(KEY_QUESTS, quests.toString());
     }
 
-    /**
-     * Hoạt động khi user hoàn thành daily quest hôm nay (tổng thời gian dùng app bị chặn < 60 phút).
-     * Nếu streak >= 7 thì bonusPerDay = 20, ngược lại 10.
-     */
-    public void completeDailyQuest() {
-        if (isQuestCompletedToday()) return; // tránh cộng 2 lần trong ngày
-        int streak = getStreak();
-        int bonus = (streak >= 7) ? 20 : 10;
-        addPoints(bonus);
-        // tăng streak (hàm updateStreakWithSuccess xử lý ngày liên tiếp)
-        updateStreakWithSuccess();
-        setQuestCompletedToday();
+    /** 🔹 Reset lại danh sách quest mỗi ngày */
+    private void resetDailyQuests() {
+        JSONArray quests = new JSONArray();
+
+        try {
+            quests.put(new JSONObject()
+                    .put("id", "no_social")
+                    .put("title", "Không mở ứng dụng mạng xã hội")
+                    .put("reward", 10)
+                    .put("completed", false));
+
+            quests.put(new JSONObject()
+                    .put("id", "focus_30")
+                    .put("title", "Hoàn thành nhiệm vụ daily")
+                    .put("reward", 30)
+                    .put("completed", false));
+
+            quests.put(new JSONObject()
+                    .put("id", "no_cancel")
+                    .put("title", "Không hủy timer hôm nay")
+                    .put("reward", 10)
+                    .put("completed", false));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        saveDailyQuests(quests);
     }
 
-    // Call khi ngày hôm nay **không** hoàn thành quest (hoặc user đã vi phạm)
-    public void failDailyQuest() {
-        // reset streak
-        setStreak(0);
-        // không trừ điểm, chỉ gãy streak
+    /** 🔹 Lấy danh sách quest */
+    public JSONArray getDailyQuests() {
+        try {
+            String json = getString(KEY_QUESTS, "");
+            if (!json.isEmpty()) return new JSONArray(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return new JSONArray();
     }
 
-    // Gọi khi user hoàn thành quest trong 1 ngày → update streak logic
-    private void updateStreakWithSuccess() {
-        long lastPacked = getLong("last_streak_day", 0);
-        Calendar now = Calendar.getInstance();
-        if (lastPacked == 0) {
-            setStreak(1);
-        } else {
-            int lastYear = (int)(lastPacked >> 16);
-            int lastDay = (int)(lastPacked & 0xFFFF);
-            Calendar last = Calendar.getInstance();
-            last.set(Calendar.YEAR, lastYear);
-            last.set(Calendar.DAY_OF_YEAR, lastDay);
-
-            int dayDiff = now.get(Calendar.DAY_OF_YEAR) - last.get(Calendar.DAY_OF_YEAR);
-            // Lưu ý: chưa xử lý đổi năm, đây là đơn giản; bạn có thể mở rộng nếu cần
-            if (dayDiff == 1 && now.get(Calendar.YEAR) == last.get(Calendar.YEAR)) {
-                setStreak(getStreak() + 1);
-            } else if (now.get(Calendar.DAY_OF_YEAR) == last.get(Calendar.DAY_OF_YEAR) && now.get(Calendar.YEAR) == last.get(Calendar.YEAR)) {
-                // cùng ngày (không tăng)
-            } else {
-                // khởi lại streak
-                setStreak(1);
+    /** 🔹 Kiểm tra quest hoàn thành chưa */
+    public boolean isQuestCompleted(String questId) {
+        JSONArray arr = getDailyQuests();
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject q = arr.getJSONObject(i);
+                if (q.getString("id").equals(questId)) {
+                    return q.getBoolean("completed");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
-        // lưu ngày streak
-        long packed = ((long)now.get(Calendar.YEAR) << 16) | (now.get(Calendar.DAY_OF_YEAR) & 0xFFFF);
-        putLong("last_streak_day", packed);
+        return false;
     }
 
+    /** 🔹 Đánh dấu hoàn thành + cộng điểm */
+    public void completeQuest(String questId) {
+        JSONArray arr = getDailyQuests();
+        boolean updated = false;
 
-    // Nếu bạn muốn force set streak (ví dụ fail)
-    public void setStreakZero() { setStreak(0); }
+        for (int i = 0; i < arr.length(); i++) {
+            try {
+                JSONObject q = arr.getJSONObject(i);
+                if (q.getString("id").equals(questId) && !q.getBoolean("completed")) {
+                    addPoints(q.getInt("reward"));
+                    q.put("completed", true);
+                    updated = true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
-    // --- Theme unlocks ---
-    // Quy ước: Dark mở ở 100đ, Galaxy mở ở 200đ, Neon mở ở 300đ
+        if (updated) saveDailyQuests(arr);
+    }
+
+    /** 🔹 Đánh dấu hoàn thành theo vị trí (nếu cần test thủ công) */
+    public void markQuestCompleted(int index) {
+        try {
+            JSONArray quests = getDailyQuests();
+            if (index >= 0 && index < quests.length()) {
+                JSONObject q = quests.getJSONObject(index);
+                if (!q.getBoolean("completed")) {
+                    q.put("completed", true);
+                    addPoints(q.getInt("reward"));
+                    saveDailyQuests(quests);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // === Theme unlocks ===
     public boolean isLightUnlocked() { return getFocusPoints() >= 100; }
     public boolean isGalaxyUnlocked() { return getFocusPoints() >= 200; }
     public boolean isNeonUnlocked() { return getFocusPoints() >= 300; }
 
-    // Lưu theme hiện tại (Light, Dark, Galaxy, Neon)
     public void setCurrentTheme(String theme) { putString("current_theme", theme); }
     public String getCurrentTheme() { return getString("current_theme", "Dark"); }
 
-    // --- XP Progression ---
+    // === XP Progression ===
     public int getCurrentXPInRank() {
         int xp = getFocusPoints();
-        if (xp < 100) return xp;             // Beginner
-        else if (xp < 200) return xp - 100;  // Pro
-        else if (xp < 300) return xp - 200;  // Master (giới hạn)
-        else return 200;                     // Max cap
+        if (xp < 100) return xp;
+        else if (xp < 200) return xp - 100;
+        else if (xp < 300) return xp - 200;
+        else return 200;
     }
 
     public int getRequiredXPForNextRank() {
         int xp = getFocusPoints();
-        if (xp < 100) return 100;            // Beginner -> Pro
-        else if (xp < 100) return 100;       // Pro -> Master
-        else if (xp < 200) return 100;       // Master -> max cap
-        else return 0;                       // full XP
+        if (xp < 100) return 100;
+        else if (xp < 200) return 100;
+        else return 0;
     }
 
     public String getProgressText() {
@@ -152,6 +195,7 @@ public class GamificationManager {
     public String getNextRankName() {
         int xp = getFocusPoints();
         if (xp < 100) return "Pro";
-        else return "Master of Focus";
+        else if (xp < 200) return "Master of Focus";
+        else return "Legend";
     }
 }

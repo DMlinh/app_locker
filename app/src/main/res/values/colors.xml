@@ -20,4 +20,6 @@
     <color name="spinner_text_color">#FFFFFF</color>
     <color name="spinner_dropdown_text_color">#FFFFFF</color>
     <color name="spinner_dropdown_bg">#2E2E2E</color>
+
+    <color name="neon_green">#39FF14</color>
 </resources>

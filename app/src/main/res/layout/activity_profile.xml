@@ -7,46 +7,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 👤 Tên người dùng -->
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="👤 Minh"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnPrimary"
-        android:layout_marginBottom="8dp" />
-
-    <!-- 🎯 Điểm + 🔥 Chuỗi -->
+    <!-- 🎯 Điểm tập trung -->
     <TextView
         android:id="@+id/tvPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🎯 Điểm: 99,600 | 🔥 Chuỗi: 7 ngày"
+        android:text="🎯 Điểm tập trung: 0"
         android:textColor="?attr/colorOnPrimary"
         android:textSize="18sp"
         android:textStyle="bold" />
-
-    <!-- 🔥 Chuỗi riêng (ẩn để tránh lỗi Java) -->
-    <TextView
-        android:id="@+id/tvStreak"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🔥 Chuỗi: 7 ngày"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="16sp"
-        android:visibility="gone" />
 
     <!-- 🏆 Cấp bậc -->
     <TextView
         android:id="@+id/tvRank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cấp bậc: Master of Focus"
+        android:text="🏆 Cấp bậc: Beginner"
         android:textSize="18sp"
         android:textColor="?attr/colorOnPrimary"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:textStyle="bold" />
 
     <!-- 📈 Nhãn tiến trình -->
@@ -54,6 +33,7 @@
         android:id="@+id/tvProgressLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Beginner (0/100)"
         android:textSize="16sp"
         android:textColor="?attr/colorOnPrimary"
         android:layout_marginTop="6dp" />
@@ -66,7 +46,7 @@
         android:layout_height="10dp"
         android:layout_marginTop="6dp"
         android:progressTint="?attr/colorPrimary"
-        android:progress="83" />
+        android:progress="0" />
 
     <!-- Divider -->
     <View
@@ -77,12 +57,49 @@
         android:background="?attr/colorPrimary"
         android:alpha="0.3" />
 
+    <!-- 🎯 Daily Quest section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎯 Nhiệm vụ hằng ngày"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:id="@+id/questList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:divider="?android:attr/dividerVertical"
+        android:showDividers="middle"
+        android:layout_marginBottom="12dp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/colorPrimary"
+        android:alpha="0.3" />
+
     <!-- 🌈 Danh sách theme -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎨 Giao diện"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:layout_marginBottom="6dp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="4dp">
 
         <LinearLayout
             android:id="@+id/themeList"
