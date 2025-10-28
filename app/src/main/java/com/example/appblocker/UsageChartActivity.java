@@ -26,6 +26,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -165,10 +166,17 @@ public class UsageChartActivity extends BaseActivity {
         }
 
         BarDataSet dataSet = new BarDataSet(entries, "Thời gian sử dụng (phút)");
-        dataSet.setColor(getResources().getColor(R.color.white));
-        dataSet.setValueTextSize(12f);
-        dataSet.setValueTextColor(getResources().getColor(android.R.color.white));
-        dataSet.setDrawValues(true);
+        int barColor = MaterialColors.getColor(this, R.attr.chartBarColor, Color.WHITE);
+        int textColor = MaterialColors.getColor(this, R.attr.chartTextColor, Color.WHITE);
+
+        dataSet.setColor(barColor);
+        dataSet.setValueTextColor(textColor);
+        dataSet.setValueTextSize(12f); // tăng kích cỡ chữ giá trị cột
+        dataSet.setValueTypeface(Typeface.DEFAULT_BOLD); // in đậm số phút
+
+        barChart.getXAxis().setTextColor(textColor);
+        barChart.getAxisLeft().setTextColor(textColor);
+
 
         // 💬 Hiển thị "Xp" trên cột
         dataSet.setValueFormatter(new ValueFormatter() {

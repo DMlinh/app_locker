@@ -19,13 +19,13 @@
         android:layout_weight="1"
         android:paddingStart="8dp"
         android:textSize="16sp"
-        android:textColor="@color/white"/>
+        android:textColor="?attr/colorOnPrimary"/>
 
     <CheckBox
         android:id="@+id/cbBlock"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:buttonTint="@android:color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:layout_gravity="center"/>
 
 </LinearLayout>

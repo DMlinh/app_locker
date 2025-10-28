@@ -19,7 +19,7 @@
         android:text="Total usage: 0 phút 0 giây"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnPrimary"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="12dp" />
 

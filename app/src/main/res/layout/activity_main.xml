@@ -57,7 +57,6 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="#534D4D"
             android:text="START"
              />
 
@@ -65,7 +64,6 @@
             android:id="@+id/btnCancel"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="#534D4D"
             android:text="CANCEL"
              />
     </LinearLayout>
@@ -147,7 +145,6 @@
         android:id="@+id/btnChooseApps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#534D4D"
         android:text="📱 Chọn ứng dụng để chặn"
          />
 
@@ -155,7 +152,6 @@
         android:id="@+id/btnMyUsage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#534D4D"
         android:text="📊 Thống kê thời gian sử dụng"
          />
 

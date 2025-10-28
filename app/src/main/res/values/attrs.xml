@@ -2,4 +2,7 @@
     <attr name="spinner_text_color" format="color" />
     <attr name="spinner_dropdown_text_color" format="color" />
     <attr name="spinner_dropdown_bg_color" format="color" />
+    <!-- 🎨 Thuộc tính riêng cho theme -->
+    <attr name="chartBarColor" format="color" />
+    <attr name="chartTextColor" format="color" />
 </resources>

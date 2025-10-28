@@ -37,7 +37,7 @@ public class ProfileActivity extends BaseActivity {
         TextView rankText = findViewById(R.id.tvProgressLabel);
         ProgressBar xpBar = findViewById(R.id.progressRank);
 
-        gm.addPoints(99);
+        gm.addPoints(300);
 
         tvPoints.setText("🎯 Điểm tập trung: " + gm.getFocusPoints());
         tvStreak.setText("🔥 Chuỗi ngày: " + gm.getStreak());
