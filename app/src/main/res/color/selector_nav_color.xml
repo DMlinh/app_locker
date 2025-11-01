@@ -1,0 +1,7 @@
+<!-- res/color/selector_nav_color.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Khi item được chọn -->
+    <item android:color="?attr/chartBarColor" android:state_checked="true" />
+    <!-- Khi item không được chọn -->
+    <item android:color="?attr/chartTextColor" />
+</selector>

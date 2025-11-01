@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Calendar;
 
 public class GamificationManager {
@@ -19,7 +18,7 @@ public class GamificationManager {
         checkAndResetDailyQuests();
     }
 
-    // === SharedPreferences Helpers ===
+    // ===== SharedPreferences Helpers =====
     private int getInt(String key, int def) { return prefs.getInt(key, def); }
     private void putInt(String key, int val) { prefs.edit().putInt(key, val).apply(); }
     private String getString(String key, String def) { return prefs.getString(key, def); }
@@ -27,11 +26,11 @@ public class GamificationManager {
     private long getLong(String key, long def) { return prefs.getLong(key, def); }
     private void putLong(String key, long val) { prefs.edit().putLong(key, val).apply(); }
 
-    // === Focus Points ===
+    // ===== Focus Points =====
     public int getFocusPoints() { return getInt("focus_points", 0); }
     public void addPoints(int amount) { putInt("focus_points", getFocusPoints() + amount); }
 
-    // === Rank ===
+    // ===== Rank System =====
     public String getRank() {
         int points = getFocusPoints();
         if (points < 100) return "Beginner";
@@ -40,45 +39,45 @@ public class GamificationManager {
         else return "Legend";
     }
 
-    // === Daily Quests Management ===
+    // ===== Daily Quests =====
     private void checkAndResetDailyQuests() {
         Calendar today = Calendar.getInstance();
         int todayKey = today.get(Calendar.YEAR) * 1000 + today.get(Calendar.DAY_OF_YEAR);
         int lastKey = (int) getLong(KEY_LAST_RESET, 0);
 
-        // 🔁 Reset nhiệm vụ mỗi ngày
         if (todayKey != lastKey) {
             resetDailyQuests();
             putLong(KEY_LAST_RESET, todayKey);
         }
     }
 
-    /** 🔹 Lưu danh sách quest (JSONArray) */
     private void saveDailyQuests(JSONArray quests) {
         putString(KEY_QUESTS, quests.toString());
     }
 
-    /** 🔹 Reset lại danh sách quest mỗi ngày */
+    /** 🔁 Reset danh sách quest mỗi ngày */
     private void resetDailyQuests() {
         JSONArray quests = new JSONArray();
-
         try {
+            // Quest 1: Mở app 1 lần trong ngày
             quests.put(new JSONObject()
-                    .put("id", "no_social")
-                    .put("title", "Không mở ứng dụng mạng xã hội")
+                    .put("id", "open_app")
+                    .put("title", "Mở ứng dụng ít nhất 1 lần trong ngày")
+                    .put("reward", 5)
+                    .put("completed", false));
+
+            // Quest 2: Bắt đầu Start Timer
+            quests.put(new JSONObject()
+                    .put("id", "start_timer")
+                    .put("title", "Bắt đầu 1 phiên Focus (Start Timer)")
                     .put("reward", 10)
                     .put("completed", false));
 
-            quests.put(new JSONObject()
-                    .put("id", "focus_30")
-                    .put("title", "Hoàn thành nhiệm vụ daily")
-                    .put("reward", 30)
-                    .put("completed", false));
-
+            // Quest 3: Không bấm Cancel trong khi countdown
             quests.put(new JSONObject()
                     .put("id", "no_cancel")
-                    .put("title", "Không hủy timer hôm nay")
-                    .put("reward", 10)
+                    .put("title", "Không bấm Cancel trong suốt phiên Focus")
+                    .put("reward", 15)
                     .put("completed", false));
 
         } catch (JSONException e) {
@@ -88,7 +87,6 @@ public class GamificationManager {
         saveDailyQuests(quests);
     }
 
-    /** 🔹 Lấy danh sách quest */
     public JSONArray getDailyQuests() {
         try {
             String json = getString(KEY_QUESTS, "");
@@ -99,7 +97,7 @@ public class GamificationManager {
         return new JSONArray();
     }
 
-    /** 🔹 Kiểm tra quest hoàn thành chưa */
+    // ===== Quest Logic =====
     public boolean isQuestCompleted(String questId) {
         JSONArray arr = getDailyQuests();
         for (int i = 0; i < arr.length(); i++) {
@@ -108,14 +106,12 @@ public class GamificationManager {
                 if (q.getString("id").equals(questId)) {
                     return q.getBoolean("completed");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            } catch (JSONException e) { e.printStackTrace(); }
         }
         return false;
     }
 
-    /** 🔹 Đánh dấu hoàn thành + cộng điểm */
+    /** 🔹 Hoàn thành quest theo id + cộng điểm */
     public void completeQuest(String questId) {
         JSONArray arr = getDailyQuests();
         boolean updated = false;
@@ -124,36 +120,17 @@ public class GamificationManager {
             try {
                 JSONObject q = arr.getJSONObject(i);
                 if (q.getString("id").equals(questId) && !q.getBoolean("completed")) {
-                    addPoints(q.getInt("reward"));
                     q.put("completed", true);
+                    addPoints(q.getInt("reward"));
                     updated = true;
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            } catch (JSONException e) { e.printStackTrace(); }
         }
 
         if (updated) saveDailyQuests(arr);
     }
 
-    /** 🔹 Đánh dấu hoàn thành theo vị trí (nếu cần test thủ công) */
-    public void markQuestCompleted(int index) {
-        try {
-            JSONArray quests = getDailyQuests();
-            if (index >= 0 && index < quests.length()) {
-                JSONObject q = quests.getJSONObject(index);
-                if (!q.getBoolean("completed")) {
-                    q.put("completed", true);
-                    addPoints(q.getInt("reward"));
-                    saveDailyQuests(quests);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // === Theme unlocks ===
+    // ===== Theme unlocks =====
     public boolean isLightUnlocked() { return getFocusPoints() >= 100; }
     public boolean isGalaxyUnlocked() { return getFocusPoints() >= 200; }
     public boolean isNeonUnlocked() { return getFocusPoints() >= 300; }
@@ -161,7 +138,7 @@ public class GamificationManager {
     public void setCurrentTheme(String theme) { putString("current_theme", theme); }
     public String getCurrentTheme() { return getString("current_theme", "Dark"); }
 
-    // === XP Progression ===
+    // ===== XP / Rank Progress =====
     public int getCurrentXPInRank() {
         int xp = getFocusPoints();
         if (xp < 100) return xp;
@@ -198,4 +175,14 @@ public class GamificationManager {
         else if (xp < 200) return "Master of Focus";
         else return "Legend";
     }
+
+    public void resetProgress() {
+        prefs.edit()
+                .remove("focus_points")
+                .remove(KEY_QUESTS)
+                .remove(KEY_LAST_RESET)
+                .apply();
+        checkAndResetDailyQuests(); // tạo lại quest mặc định sau reset
+    }
+
 }

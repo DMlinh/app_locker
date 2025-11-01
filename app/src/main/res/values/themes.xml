@@ -1,74 +1,53 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- 🌼 Base Theme -->
     <style name="Theme.Applocker" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/bg_pastel</item>
-        <!-- Chart colors -->
-        <item name="chartBarColor">#FFFFFF</item> <!-- Trắng -->
-        <item name="chartTextColor">#FFFFFF</item> <!-- Trắng -->
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimary">#5F5A5A</item>
+        <item name="chartBarColor">#FFFFFF</item>
+        <item name="chartTextColor">#FFFFFF</item>
     </style>
 
-
-    <!-- 🌌 GALAXY THEME -->
-    <style name="AppTheme_Galaxy" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#7F00FF</item>
+    <!-- 🌌 GALAXY -->
+    <style name="AppTheme_Galaxy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#8A28A7</item>
         <item name="colorPrimaryVariant">#E100FF</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="android:windowBackground">@drawable/bg_galaxy</item>
         <item name="android:textColor">#FFFFFF</item>
-
-        <!-- Spinner -->
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
-        <item name="spinner_dropdown_bg_color">#1A1A1A</item>
-
-        <!-- Chart colors -->
-        <item name="chartBarColor">#00FFFF</item> <!-- Cyan -->
+        <item name="spinner_dropdown_bg_color">#3F0D4B</item>
+        <item name="chartBarColor">#00FFFF</item>
         <item name="chartTextColor">#FFFFFF</item>
     </style>
 
 
-    <!-- Theme Light  -->
-    <style name="AppTheme.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorOnPrimary">#000000</item>
-        <item name="android:windowBackground">#FFFFFF</item>
-        <item name="android:buttonStyle">@style/LightButton</item>
-
-        <!-- Spinner -->
-        <item name="spinner_text_color">#000000</item>
-        <item name="spinner_dropdown_text_color">#0E0E0E</item>
-        <item name="spinner_dropdown_bg_color">#1A1A1A</item>
-
-        <!-- Chart colors -->
-        <item name="chartBarColor">#000000</item> <!-- Đen -->
-        <item name="chartTextColor">#000000</item> <!-- Đen -->
-    </style>
-
-    <!-- Nút trắng viền đen cho Light Theme -->
-    <style name="LightButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/btn_light</item>
-    </style>
-
-
-    <!-- 🌈 NEON THEME -->
+    <!-- 🌈 NEON -->
     <style name="AppTheme_Neon" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#FF00FF</item>
+        <item name="colorOnPrimary">#E0FFFF</item>
         <item name="android:windowBackground">@drawable/bg_neon</item>
         <item name="android:textColor">#FFFFFF</item>
-        <item name="android:buttonStyle">@style/NeonButton</item>
-
-        <!-- Spinner -->
-        <item name="spinner_text_color">#BC17D4</item>
+        <item name="spinner_text_color">#E4D9D9</item>
         <item name="spinner_dropdown_text_color">#C60FE0</item>
-        <item name="spinner_dropdown_bg_color">#E00909</item>
-
-        <!-- Chart colors -->
-        <item name="chartBarColor">#FF00FF</item> <!-- Neon hồng -->
+        <item name="spinner_dropdown_bg_color">#B810D6</item>
+        <item name="chartBarColor">#FF00FF</item>
         <item name="chartTextColor">#E0FFFF</item>
     </style>
 
-    <style name="NeonButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@drawable/btn_neon</item>
-        <item name="android:textColor">@android:color/white</item>
+
+    <!-- 🌞 LIGHT -->
+    <style name="AppTheme.Light" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="spinner_text_color">#000000</item>
+        <item name="spinner_dropdown_text_color">#0E0E0E</item>
+        <item name="spinner_dropdown_bg_color">#1A1A1A</item>
+        <item name="chartBarColor">#000000</item>
+        <item name="chartTextColor">#000000</item>
     </style>
 
 </resources>

@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,65 +22,98 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends BaseActivity {
-    private TextView tvTimer;
+    private TextView tvTimer, tvQuote;
     private CountDownTimer countDownTimer;
-    private long timeLimit = 30 * 1000; // 30 giây
+    private long timeLimit = 30 * 1000; // mặc định 30s
     private boolean isRunning = false;
     private int selectedHours = 0, selectedMinutes = 0;
+    private BottomNavigationView bottomNav;
+    private GamificationManager gm; // ✅ thêm GamificationManager
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            savedInstanceState.remove("android:viewHierarchyState");
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        gm = new GamificationManager(this); // ✅ Khởi tạo gamification manager
+
+        // --- Khi mở app, hoàn thành quest mở ứng dụng ---
+        gm.completeQuest("open_app");
 
         Spinner spinnerHours = findViewById(R.id.spinnerHours);
         Spinner spinnerMinutes = findViewById(R.id.spinnerMinutes);
         tvTimer = findViewById(R.id.tvPermission);
+        tvQuote = findViewById(R.id.tvQuote);
         Button btnStart = findViewById(R.id.btnStart);
         Button btnCancel = findViewById(R.id.btnCancel);
-        Button btnChooseApps = findViewById(R.id.btnChooseApps);
-        Button btnMyUsage = findViewById(R.id.btnMyUsage);
-        ImageView ivRankIcon = findViewById(R.id.ivRankIcon);
-        TextView tvQuote = findViewById(R.id.tvQuote);
-
-        // Áp dụng theme cho button
-        ThemeManager.applyButtonTheme(this, btnStart);
-        ThemeManager.applyButtonTheme(this, btnCancel);
-        ThemeManager.applyButtonTheme(this, btnChooseApps);
-        ThemeManager.applyButtonTheme(this, btnMyUsage);
-
-        // Điều hướng giữa các activity
-        btnChooseApps.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, AppListActivity.class)));
-        btnMyUsage.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, UsageChartActivity.class)));
-        ivRankIcon.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
-
-        // Kiểm tra quyền
-        if (!PermissionUtils.hasUsageStatsPermission(this)) {
-            PermissionUtils.requestUsageStatsPermission(this);
-        }
+        bottomNav = findViewById(R.id.bottomNavigation);
 
         // --- QUOTES NGẪU NHIÊN ---
         String[] quotes = getResources().getStringArray(R.array.time_quotes);
         tvQuote.setText(quotes[new Random().nextInt(quotes.length)]);
         Animation fadeIn = new AlphaAnimation(0f, 1f);
-        fadeIn.setDuration(7000);
+        fadeIn.setDuration(6000);
         fadeIn.setFillAfter(true);
         tvQuote.startAnimation(fadeIn);
 
         // --- SPINNER DỮ LIỆU ---
+        setupSpinners(spinnerHours, spinnerMinutes);
+
+        // --- KIỂM TRA QUYỀN ---
+        if (!PermissionUtils.hasUsageStatsPermission(this)) {
+            PermissionUtils.requestUsageStatsPermission(this);
+        }
+
+        // --- BUTTONS ---
+        btnStart.setOnClickListener(v -> {
+            if (!hasUsageStatsPermission()) {
+                Toast.makeText(this, R.string.need_usage_permission, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+            } else if (!isAccessibilityServiceEnabled()) {
+                Toast.makeText(this, R.string.need_accessibility_service, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            } else {
+                gm.completeQuest("start_timer"); // ✅ Hoàn thành quest 2 khi bắt đầu timer
+                startTimer(btnStart);
+            }
+        });
+
+        btnCancel.setOnClickListener(v -> {
+            if (isRunning) {
+                cancelTimer();
+            } else {
+                Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // --- BOTTOM NAVIGATION ---
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) return true;
+            else if (id == R.id.nav_apps) {
+                startActivity(new Intent(this, AppListActivity.class));
+                return true;
+            } else if (id == R.id.nav_stats) {
+                startActivity(new Intent(this, UsageChartActivity.class));
+                return true;
+            } else if (id == R.id.nav_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                return true;
+            }
+            return false;
+        });
+    }
+
+    // === SETUP SPINNERS ===
+    private void setupSpinners(Spinner spinnerHours, Spinner spinnerMinutes) {
         List<String> hours = new ArrayList<>();
         for (int i = 0; i <= 12; i++) hours.add(String.valueOf(i));
 
@@ -90,53 +121,16 @@ public class MainActivity extends BaseActivity {
         for (int i = 0; i < 60; i += 5)
             minutes.add(String.format(Locale.getDefault(), "%02d", i));
 
-        // --- SPINNER ADAPTER (giờ) ---
         ArrayAdapter<String> hoursAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, hours) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_text_color));
-                return tv;
-            }
-
-            @NonNull
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_dropdown_text_color));
-                tv.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_dropdown_bg));
-                return tv;
-            }
-        };
+                android.R.layout.simple_spinner_item, hours);
         hoursAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHours.setAdapter(hoursAdapter);
 
-        // --- SPINNER ADAPTER (phút) ---
         ArrayAdapter<String> minutesAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, minutes) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getView(position, convertView, parent);
-                tv.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_text_color));
-                return tv;
-            }
-
-            @NonNull
-            @Override
-            public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-                TextView tv = (TextView) super.getDropDownView(position, convertView, parent);
-                tv.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_dropdown_text_color));
-                tv.setBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.spinner_dropdown_bg));
-                return tv;
-            }
-        };
+                android.R.layout.simple_spinner_item, minutes);
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMinutes.setAdapter(minutesAdapter);
 
-        // --- SPINNER LISTENERS ---
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
@@ -145,7 +139,7 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onNothingSelected(@NonNull AdapterView<?> parent) { }
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -156,43 +150,23 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onNothingSelected(@NonNull AdapterView<?> parent) { }
-        });
-
-        // --- BUTTON EVENTS ---
-        btnCancel.setOnClickListener(v -> {
-            if (isRunning) {
-                cancelTimer();
-            } else {
-                Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnStart.setOnClickListener(v -> {
-            if (!hasUsageStatsPermission()) {
-                Toast.makeText(this, R.string.need_usage_permission, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-            } else if (!isAccessibilityServiceEnabled()) {
-                Toast.makeText(this, R.string.need_accessibility_service, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-            } else {
-                startTimer(btnStart);
-            }
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
     }
 
+    // === TIMER LOGIC ===
     private void startTimer(Button btnStart) {
         isRunning = true;
         btnStart.setEnabled(false);
-        saveBlockingState(true);
 
         countDownTimer = new CountDownTimer(timeLimit, 1000) {
             @Override
             public void onFinish() {
                 Toast.makeText(MainActivity.this, R.string.time_up, Toast.LENGTH_LONG).show();
                 isRunning = false;
-                saveBlockingState(false);
                 btnStart.setEnabled(true);
+
+                gm.completeQuest("no_cancel"); // ✅ Hoàn thành quest 3 nếu đến hết mà không bấm Cancel
             }
 
             @Override
@@ -203,16 +177,15 @@ public class MainActivity extends BaseActivity {
                 long seconds = totalSeconds % 60;
 
                 String totalText;
-                if (hours > 0) {
+                if (hours > 0)
                     totalText = String.format(Locale.getDefault(),
-                            "Còn lại: %d giờ %d phút %d giây", hours, minutes, seconds);
-                } else if (minutes > 0) {
+                            "⏳ Còn lại: %d giờ %d phút %d giây", hours, minutes, seconds);
+                else if (minutes > 0)
                     totalText = String.format(Locale.getDefault(),
-                            "Còn lại: %d phút %d giây", minutes, seconds);
-                } else {
+                            "⏳ Còn lại: %d phút %d giây", minutes, seconds);
+                else
                     totalText = String.format(Locale.getDefault(),
-                            "Còn lại: %d giây", seconds);
-                }
+                            "⏳ Còn lại: %d giây", seconds);
 
                 tvTimer.setText(totalText);
             }
@@ -220,12 +193,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void cancelTimer() {
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-            tvTimer.setText(R.string.cancelled);
-            isRunning = false;
-            saveBlockingState(false);
-        }
+        if (countDownTimer != null) countDownTimer.cancel();
+        tvTimer.setText(R.string.cancelled);
+        isRunning = false;
+
         Button btnStart = findViewById(R.id.btnStart);
         btnStart.setEnabled(true);
     }
@@ -235,21 +206,11 @@ public class MainActivity extends BaseActivity {
         if (timeLimit == 0) timeLimit = 30 * 1000;
     }
 
-    private void saveBlockingState(boolean active) {
-        getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
-                .edit()
-                .putBoolean("isBlockingActive", active)
-                .apply();
-    }
-
     private boolean hasUsageStatsPermission() {
         try {
             AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOps.checkOpNoThrow(
-                    AppOpsManager.OPSTR_GET_USAGE_STATS,
-                    android.os.Process.myUid(),
-                    getPackageName()
-            );
+            int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), getPackageName());
             return (mode == AppOpsManager.MODE_ALLOWED);
         } catch (Exception e) {
             return false;
@@ -259,9 +220,8 @@ public class MainActivity extends BaseActivity {
     private boolean isAccessibilityServiceEnabled() {
         AccessibilityManager am = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         if (am != null) {
-            List<AccessibilityServiceInfo> enabledServices =
-                    am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
-            for (AccessibilityServiceInfo serviceInfo : enabledServices) {
+            for (AccessibilityServiceInfo serviceInfo :
+                    am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)) {
                 ComponentName enabledService = ComponentName.unflattenFromString(serviceInfo.getId());
                 if (enabledService != null &&
                         enabledService.getPackageName().equals(getPackageName())) {
