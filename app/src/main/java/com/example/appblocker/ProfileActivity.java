@@ -33,8 +33,8 @@ public class ProfileActivity extends BaseActivity {
 //        gm.resetProgress();
 //        Toast.makeText(this, "Đã reset toàn bộ điểm và quest!", Toast.LENGTH_SHORT).show();
 
-        // ❌ Bỏ dòng test addPoints, để user kiếm điểm thật
-        // gm.addPoints(300);
+         //❌ Bỏ dòng test addPoints, để user kiếm điểm thật
+         gm.addPoints(300);
 
         // 🔹 Hiển thị điểm & cấp bậc
         tvPoints.setText("🎯 Điểm tập trung: " + gm.getFocusPoints());

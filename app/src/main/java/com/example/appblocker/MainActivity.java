@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -36,16 +35,16 @@ public class MainActivity extends BaseActivity {
     private boolean isRunning = false;
     private int selectedHours = 0, selectedMinutes = 0;
     private BottomNavigationView bottomNav;
-    private GamificationManager gm; // ✅ thêm GamificationManager
+    private GamificationManager gm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gm = new GamificationManager(this); // ✅ Khởi tạo gamification manager
+        gm = new GamificationManager(this);
 
-        // --- Khi mở app, hoàn thành quest mở ứng dụng ---
+        // ✅ Hoàn thành quest 1 khi mở app
         gm.completeQuest("open_app");
 
         Spinner spinnerHours = findViewById(R.id.spinnerHours);
@@ -56,7 +55,7 @@ public class MainActivity extends BaseActivity {
         Button btnCancel = findViewById(R.id.btnCancel);
         bottomNav = findViewById(R.id.bottomNavigation);
 
-        // --- QUOTES NGẪU NHIÊN ---
+        // 🌟 Quote ngẫu nhiên
         String[] quotes = getResources().getStringArray(R.array.time_quotes);
         tvQuote.setText(quotes[new Random().nextInt(quotes.length)]);
         Animation fadeIn = new AlphaAnimation(0f, 1f);
@@ -64,37 +63,51 @@ public class MainActivity extends BaseActivity {
         fadeIn.setFillAfter(true);
         tvQuote.startAnimation(fadeIn);
 
-        // --- SPINNER DỮ LIỆU ---
+        // Spinner setup
         setupSpinners(spinnerHours, spinnerMinutes);
 
-        // --- KIỂM TRA QUYỀN ---
+        // Kiểm tra quyền
         if (!PermissionUtils.hasUsageStatsPermission(this)) {
             PermissionUtils.requestUsageStatsPermission(this);
         }
 
-        // --- BUTTONS ---
+        // === Nút START ===
         btnStart.setOnClickListener(v -> {
             if (!hasUsageStatsPermission()) {
                 Toast.makeText(this, R.string.need_usage_permission, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-            } else if (!isAccessibilityServiceEnabled()) {
+                return;
+            }
+            if (!isAccessibilityServiceEnabled()) {
                 Toast.makeText(this, R.string.need_accessibility_service, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-            } else {
-                gm.completeQuest("start_timer"); // ✅ Hoàn thành quest 2 khi bắt đầu timer
-                startTimer(btnStart);
+                return;
             }
+
+            // ✅ Đánh dấu đã bắt đầu timer (quest 2)
+            gm.completeQuest("start_timer");
+
+            // ✅ Bật chế độ chặn
+            getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                    .edit().putBoolean("isBlockingActive", true).apply();
+
+            startTimer(btnStart);
         });
 
+        // === Nút CANCEL ===
         btnCancel.setOnClickListener(v -> {
             if (isRunning) {
                 cancelTimer();
+
+                // ✅ Tắt chế độ chặn khi người dùng bấm cancel
+                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                        .edit().putBoolean("isBlockingActive", false).apply();
             } else {
                 Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
             }
         });
 
-        // --- BOTTOM NAVIGATION ---
+        // === BOTTOM NAVIGATION ===
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) return true;
@@ -132,25 +145,19 @@ public class MainActivity extends BaseActivity {
         spinnerMinutes.setAdapter(minutesAdapter);
 
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedHours = Integer.parseInt(hours.get(position));
                 updateTimeLimit();
             }
-
-            @Override
-            public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedMinutes = Integer.parseInt(minutes.get(position));
                 updateTimeLimit();
             }
-
-            @Override
-            public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
     }
 
@@ -166,7 +173,12 @@ public class MainActivity extends BaseActivity {
                 isRunning = false;
                 btnStart.setEnabled(true);
 
-                gm.completeQuest("no_cancel"); // ✅ Hoàn thành quest 3 nếu đến hết mà không bấm Cancel
+                // ✅ Hoàn thành quest 3 nếu user không cancel
+                gm.completeQuest("no_cancel");
+
+                // ✅ Tắt chặn khi hết thời gian
+                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                        .edit().putBoolean("isBlockingActive", false).apply();
             }
 
             @Override
@@ -196,9 +208,7 @@ public class MainActivity extends BaseActivity {
         if (countDownTimer != null) countDownTimer.cancel();
         tvTimer.setText(R.string.cancelled);
         isRunning = false;
-
-        Button btnStart = findViewById(R.id.btnStart);
-        btnStart.setEnabled(true);
+        findViewById(R.id.btnStart).setEnabled(true);
     }
 
     private void updateTimeLimit() {
