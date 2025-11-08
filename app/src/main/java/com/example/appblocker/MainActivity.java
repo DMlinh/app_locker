@@ -21,8 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -34,13 +32,13 @@ public class MainActivity extends BaseActivity {
     private long timeLimit = 30 * 1000; // mặc định 30s
     private boolean isRunning = false;
     private int selectedHours = 0, selectedMinutes = 0;
-    private BottomNavigationView bottomNav;
     private GamificationManager gm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupBottomNav(R.id.nav_home);
 
         gm = new GamificationManager(this);
 
@@ -107,22 +105,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        // === BOTTOM NAVIGATION ===
-        bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_home) return true;
-            else if (id == R.id.nav_apps) {
-                startActivity(new Intent(this, AppListActivity.class));
-                return true;
-            } else if (id == R.id.nav_stats) {
-                startActivity(new Intent(this, UsageChartActivity.class));
-                return true;
-            } else if (id == R.id.nav_profile) {
-                startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            }
-            return false;
-        });
     }
 
     // === SETUP SPINNERS ===
@@ -144,6 +126,7 @@ public class MainActivity extends BaseActivity {
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMinutes.setAdapter(minutesAdapter);
 
+
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedHours = Integer.parseInt(hours.get(position));
@@ -151,6 +134,7 @@ public class MainActivity extends BaseActivity {
             }
             @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
+
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {

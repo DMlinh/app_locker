@@ -3,6 +3,7 @@ package com.example.appblocker;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -28,6 +29,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.color.MaterialColors;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -45,6 +47,7 @@ public class UsageChartActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usage_chart);
+        setupBottomNav(R.id.nav_stats);
 
         barChart = findViewById(R.id.barChart);
         appListLayout = findViewById(R.id.appListLayout);

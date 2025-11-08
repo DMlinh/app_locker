@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+
+import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected BottomNavigationView bottomNav;
     private String lastTheme;
 
     private final BroadcastReceiver themeReceiver = new BroadcastReceiver() {
@@ -68,5 +72,40 @@ public abstract class BaseActivity extends AppCompatActivity {
                 setTheme(R.style.Theme_Applocker);
                 break;
         }
+    }
+
+    protected void setupBottomNav(@IdRes int currentItemId) {
+        bottomNav = findViewById(R.id.bottomNavigation);
+        if (bottomNav == null) return;
+
+        // Đánh dấu item hiện tại
+        bottomNav.setSelectedItemId(currentItemId);
+
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home && currentItemId != R.id.nav_home) {
+                navigateTo(MainActivity.class, R.anim.slide_in_left, R.anim.slide_out_right);
+                return true;
+            } else if (id == R.id.nav_apps && currentItemId != R.id.nav_apps) {
+                navigateTo(AppListActivity.class, R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
+            } else if (id == R.id.nav_stats && currentItemId != R.id.nav_stats) {
+                navigateTo(UsageChartActivity.class, R.anim.fade_in, R.anim.fade_out);
+                return true;
+            } else if (id == R.id.nav_profile && currentItemId != R.id.nav_profile) {
+                navigateTo(ProfileActivity.class, R.anim.slide_in_up, R.anim.slide_out_down);
+                return true;
+            }
+
+            return true;
+        });
+    }
+
+    private void navigateTo(Class<?> targetActivity, int enterAnim, int exitAnim) {
+        Intent intent = new Intent(this, targetActivity);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        overridePendingTransition(enterAnim, exitAnim);
     }
 }

@@ -9,7 +9,7 @@
         <item name="chartTextColor">#FFFFFF</item>
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
-        <item name="spinner_dropdown_bg_color">#3F0D4B</item>
+        <item name="spinner_dropdown_bg_color">#5F5A5A</item>
     </style>
 
     <!-- 🌌 GALAXY -->
@@ -48,7 +48,7 @@
         <item name="android:windowBackground">#FFFFFF</item>
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
-        <item name="spinner_dropdown_bg_color">#3F0D4B</item>
+        <item name="spinner_dropdown_bg_color">#F0EDF1</item>
         <item name="chartBarColor">#000000</item>
         <item name="chartTextColor">#000000</item>
     </style>

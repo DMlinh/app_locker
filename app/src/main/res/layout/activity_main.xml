@@ -66,8 +66,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:spinnerMode="dropdown"
-                    android:popupBackground="@color/spinner_dropdown_bg"
-                    android:backgroundTint="@color/spinner_dropdown_bg"
+                    android:backgroundTint="?attr/spinner_dropdown_bg_color"
+                    android:popupBackground="?attr/spinner_dropdown_bg_color"
                     android:layout_gravity="center" />
 
                 <TextView
@@ -92,8 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:spinnerMode="dropdown"
-                    android:popupBackground="@color/spinner_dropdown_bg"
-                    android:backgroundTint="@color/spinner_dropdown_bg"
+                    android:backgroundTint="?attr/spinner_dropdown_bg_color"
+                    android:popupBackground="?attr/spinner_dropdown_bg_color"
                     android:layout_gravity="center" />
 
                 <TextView

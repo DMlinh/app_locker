@@ -1,5 +1,6 @@
 package com.example.appblocker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,9 +20,11 @@ public class ProfileActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        setupBottomNav(R.id.nav_profile);
 
         gm = new GamificationManager(this);
 
+        bottomNav = findViewById(R.id.bottomNavigation);
         TextView tvPoints = findViewById(R.id.tvPoints);
         TextView tvRank = findViewById(R.id.tvRank);
         LinearLayout themeList = findViewById(R.id.themeList);
@@ -56,6 +59,7 @@ public class ProfileActivity extends BaseActivity {
         tvRank.setText("🏆 Cấp bậc: " + gm.getRank());
         rankText.setText(gm.getProgressText() + " → " + gm.getNextRankName());
         xpBar.setProgress((int) (gm.getProgressPercent() * 100));
+
     }
 
     /**
