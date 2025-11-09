@@ -7,8 +7,9 @@
     <string name="time_up">Hết thời gian sử dụng!</string>
     <string name="need_usage_permission">Cần cấp quyền Usage Access</string>
     <string name="need_accessibility_service">Cần bật Accessibility Service</string>
-    <string name="no_timer_running">Không có bộ đếm nào đang chạy!</string>
     <string name="locked">Locked</string>
+    <string name="timer_cancelled">Timer đã bị hủy</string>
+    <string name="no_timer_running">Không có timer đang chạy</string>
 
     <string-array name="time_quotes">
         <item>⏰ Thời gian là tài nguyên quý nhất của cuộc sống.</item>

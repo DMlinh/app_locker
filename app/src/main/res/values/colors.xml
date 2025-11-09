@@ -22,4 +22,7 @@
     <color name="spinner_dropdown_bg">#FFFFFF</color>
 
     <color name="neon_green">#39FF14</color>
+
+    <color name="background_light">#FFFFFF</color> <!-- màu nền sáng -->
+    <color name="background_dark">#121212</color> <!-- màu nền tối -->
 </resources>

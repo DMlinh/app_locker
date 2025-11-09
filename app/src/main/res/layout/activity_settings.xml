@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="top"
+    android:background="?android:windowBackground">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cài đặt ứng dụng"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorOnBackground"
+        android:paddingBottom="16dp" />
+
+    <!-- 🔐 Cài đặt mã PIN -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingVertical="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Yêu cầu mã PIN khi Cancel"
+            android:textSize="16sp"
+            android:textColor="?attr/colorOnBackground" />
+
+        <Switch
+            android:id="@+id/switch_pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tvCurrentPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chưa thiết lập PIN"
+        android:textSize="16sp"
+        android:paddingVertical="8dp"
+        android:textColor="?attr/colorOnBackground"/>
+
+    <Button
+        android:id="@+id/btnChangePin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đổi PIN"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="@android:color/white"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutline" />
+
+    <!-- ⚙️ Kiểm tra quyền -->
+    <Button
+        android:id="@+id/btnCheckPermissions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kiểm tra quyền truy cập"
+        android:textAllCaps="false"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="@android:color/white" />
+
+
+
+</LinearLayout>

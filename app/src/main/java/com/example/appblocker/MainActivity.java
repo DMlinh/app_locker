@@ -1,13 +1,16 @@
 package com.example.appblocker;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
+import android.text.InputType;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.AlphaAnimation;
@@ -15,6 +18,7 @@ import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,17 +98,29 @@ public class MainActivity extends BaseActivity {
 
         // === Nút CANCEL ===
         btnCancel.setOnClickListener(v -> {
-            if (isRunning) {
+            if (!isRunning) {
+                Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Lấy SharedPreferences
+            SharedPreferences prefs = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE);
+            boolean requirePin = prefs.getBoolean("require_pin", false);
+
+            if (requirePin) {
+                // Nếu yêu cầu PIN, lấy pin lưu trong prefs và show dialog
+                String savedPin = prefs.getString("pin_code", "");
+                showPinConfirmDialog(savedPin);
+            } else {
+                // Nếu không yêu cầu PIN, hủy timer ngay
                 cancelTimer();
 
-                // ✅ Tắt chế độ chặn khi người dùng bấm cancel
-                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
-                        .edit().putBoolean("isBlockingActive", false).apply();
-            } else {
-                Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
+                // Tắt chế độ chặn
+                prefs.edit().putBoolean("isBlockingActive", false).apply();
+
+                Toast.makeText(this, R.string.timer_cancelled, Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     // === SETUP SPINNERS ===
@@ -231,4 +247,23 @@ public class MainActivity extends BaseActivity {
         super.onDestroy();
         if (countDownTimer != null) countDownTimer.cancel();
     }
+
+    private void showPinConfirmDialog(String savedPin) {
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Nhập mã PIN để Cancel")
+                .setView(input)
+                .setPositiveButton("Xác nhận", (dialog, which) -> {
+                    if (input.getText().toString().equals(savedPin)) {
+                        cancelTimer();
+                    } else {
+                        Toast.makeText(this, "Sai mã PIN!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
 }

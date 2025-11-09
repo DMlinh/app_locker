@@ -10,7 +10,10 @@
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_bg_color">#5F5A5A</item>
-        <item name="progressBarColor">#F8F8F8</item> <!-- màu riêng -->
+        <item name="progressBarColor">#F8F8F8</item>
+        <item name="colorBackground">#FFFFFF</item>      <!-- Nền trắng -->
+        <item name="colorOnBackground">#000000</item>   <!-- Text màu đen trên nền trắng -->
+        <item name="colorOutline">#6E30A8</item>       <!-- Màu viền vẫn giữ -->
     </style>
 
     <!-- 🌌 GALAXY -->
@@ -26,6 +29,9 @@
         <item name="chartBarColor">#00FFFF</item>
         <item name="chartTextColor">#FFFFFF</item>
         <item name="progressBarColor">#00FFFF</item>
+        <item name="colorBackground">#FFFFFF</item>      <!-- Nền trắng -->
+        <item name="colorOnBackground">#000000</item>   <!-- Text màu đen trên nền trắng -->
+        <item name="colorOutline">#6E30A8</item>       <!-- Màu viền vẫn giữ -->
     </style>
 
 
@@ -41,6 +47,9 @@
         <item name="chartBarColor">#FF00FF</item>
         <item name="chartTextColor">#E0FFFF</item>
         <item name="progressBarColor">#FF66FF</item> <!-- màu riêng -->
+        <item name="colorBackground">#FFFFFF</item>      <!-- Nền trắng -->
+        <item name="colorOnBackground">#000000</item>   <!-- Text màu đen trên nền trắng -->
+        <item name="colorOutline">#6E30A8</item>       <!-- Màu viền vẫn giữ -->
     </style>
 
 
@@ -55,6 +64,9 @@
         <item name="chartBarColor">#000000</item>
         <item name="chartTextColor">#000000</item>
         <item name="progressBarColor">#0E0E0E</item> <!-- màu riêng -->
+        <item name="colorBackground">#FFFFFF</item>      <!-- Nền trắng -->
+        <item name="colorOnBackground">#000000</item>   <!-- Text màu đen trên nền trắng -->
+        <item name="colorOutline">#6E30A8</item>       <!-- Màu viền vẫn giữ -->
     </style>
 
 </resources>

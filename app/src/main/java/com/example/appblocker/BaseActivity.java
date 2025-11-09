@@ -97,6 +97,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 navigateTo(ProfileActivity.class, R.anim.slide_in_up, R.anim.slide_out_down);
                 return true;
             }
+            else if (id == R.id.nav_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
 
             return true;
         });

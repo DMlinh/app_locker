@@ -33,6 +33,9 @@
 
         <!-- ProfileActivity (màn chọn để đổi themes dựa trên Rank,Points) -->
         <activity android:name=".ProfileActivity"/>
+
+        <!-- SettingsActivity (màn chọn để tùy chỉnh các lựa chọn setting) -->
+        <activity android:name=".SettingsActivity"/>
         <!-- Accessibility Service -->
         <service
             android:name=".BlockerAccessibilityService"
