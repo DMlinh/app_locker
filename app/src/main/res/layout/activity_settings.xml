@@ -1,77 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="top"
     android:background="?android:windowBackground">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cài đặt ứng dụng"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnBackground"
-        android:paddingBottom="16dp" />
-
-    <!-- 🔐 Cài đặt mã PIN -->
-    <LinearLayout
+    <!-- Scroll nội dung chính -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="24dp">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Yêu cầu mã PIN khi Cancel"
-            android:textSize="16sp"
-            android:textColor="?attr/colorOnBackground" />
+            android:orientation="vertical"
+            android:gravity="top">
 
-        <Switch
-            android:id="@+id/switch_pin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tvCurrentPin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chưa thiết lập PIN"
-        android:textSize="16sp"
-        android:paddingVertical="8dp"
-        android:textColor="?attr/colorOnBackground"/>
+            <!-- Tiêu đề -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cài đặt ứng dụng"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnPrimary"
+                android:paddingBottom="16dp" />
 
-    <Button
-        android:id="@+id/btnChangePin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đổi PIN"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:textColor="@android:color/white"/>
+            <!-- 🔐 Cài đặt mã PIN -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="12dp">
 
-    <View
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Yêu cầu mã PIN khi Cancel"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnPrimary"/>
+
+                <Switch
+                    android:id="@+id/switch_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </Switch>
+            </LinearLayout>
+
+            <!-- PIN hiện tại -->
+            <TextView
+                android:id="@+id/tvCurrentPin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chưa thiết lập PIN"
+                android:textSize="16sp"
+                android:textColor="?attr/colorOnPrimary"
+                android:paddingVertical="8dp"/>
+
+            <!-- Nút đổi PIN -->
+            <Button
+                android:id="@+id/btnChangePin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đổi PIN"
+                android:textAllCaps="false"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginBottom="16dp"
+                android:paddingVertical="12dp"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOutline"
+                android:layout_marginVertical="16dp" />
+
+            <!-- Kiểm tra quyền -->
+            <Button
+                android:id="@+id/btnCheckPermissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kiểm tra quyền truy cập"
+                android:textAllCaps="false"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
+                android:paddingVertical="12dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BottomNavigationView cố định dưới màn hình -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline" />
-
-    <!-- ⚙️ Kiểm tra quyền -->
-    <Button
-        android:id="@+id/btnCheckPermissions"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kiểm tra quyền truy cập"
-        android:textAllCaps="false"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:textColor="@android:color/white" />
-
-
+        android:layout_gravity="bottom"
+        android:background="?android:windowBackground"
+        app:menu="@menu/bottom_nav_menu"
+        app:itemIconTint="@color/selector_nav_color"
+        app:itemTextColor="@color/selector_nav_color"
+        app:labelVisibilityMode="labeled" />
 
 </LinearLayout>
