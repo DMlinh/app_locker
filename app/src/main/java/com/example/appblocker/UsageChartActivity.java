@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -301,12 +302,20 @@ public class UsageChartActivity extends BaseActivity {
             tvDetail.setTextSize(14);
             tvDetail.setTextColor(Color.DKGRAY);
 
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.chartBarColor, typedValue, true);
+            int chartBarColor = typedValue.data;
+
+// === ProgressBar hiển thị % sử dụng ===
             ProgressBar progress = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
             progress.setProgress((int) percent);
             progress.setMax(100);
-            progress.setProgressTintList(ColorStateList.valueOf(
-                    ContextCompat.getColor(this, R.color.white)));
+            progress.setProgressTintList(ColorStateList.valueOf(chartBarColor)); // 🎨 cùng màu với bar chart
             progress.setScaleY(1.2f);
+            progress.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    10
+            ));
 
             textLayout.addView(tvName);
             textLayout.addView(progress);

@@ -5,4 +5,5 @@
     <!-- 🎨 Thuộc tính riêng cho theme -->
     <attr name="chartBarColor" format="color" />
     <attr name="chartTextColor" format="color" />
+    <attr name="progressBarColor" format="color" />
 </resources>

@@ -10,20 +10,22 @@
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_bg_color">#5F5A5A</item>
+        <item name="progressBarColor">#F8F8F8</item> <!-- màu riêng -->
     </style>
 
     <!-- 🌌 GALAXY -->
     <style name="AppTheme_Galaxy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#8A28A7</item>
+        <item name="colorPrimary">#7D1B97</item>
         <item name="colorPrimaryVariant">#E100FF</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="android:windowBackground">@drawable/bg_galaxy</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="spinner_text_color">#FFFFFF</item>
         <item name="spinner_dropdown_text_color">#FFFFFF</item>
-        <item name="spinner_dropdown_bg_color">#3F0D4B</item>
+        <item name="spinner_dropdown_bg_color">#7D1B97</item>
         <item name="chartBarColor">#00FFFF</item>
         <item name="chartTextColor">#FFFFFF</item>
+        <item name="progressBarColor">#00FFFF</item>
     </style>
 
 
@@ -38,6 +40,7 @@
         <item name="spinner_dropdown_bg_color">#B810D6</item>
         <item name="chartBarColor">#FF00FF</item>
         <item name="chartTextColor">#E0FFFF</item>
+        <item name="progressBarColor">#FF66FF</item> <!-- màu riêng -->
     </style>
 
 
@@ -51,6 +54,7 @@
         <item name="spinner_dropdown_bg_color">#F0EDF1</item>
         <item name="chartBarColor">#000000</item>
         <item name="chartTextColor">#000000</item>
+        <item name="progressBarColor">#0E0E0E</item> <!-- màu riêng -->
     </style>
 
 </resources>
