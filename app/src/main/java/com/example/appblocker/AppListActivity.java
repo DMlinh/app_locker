@@ -40,14 +40,11 @@ public class AppListActivity extends BaseActivity {
             try {
                 String packageName = appInfo.packageName;
 
-                // 🔹 Bỏ qua chính AppBlocker để không tự hiển thị trong danh sách
-                if (packageName.equals(myPackage)) continue;
+                // Bỏ qua chính AppBlocker
+                if (packageName.equals(getPackageName())) continue;
 
-                // 🔹 Chỉ hiển thị app người dùng cài hoặc một số hệ thống quan trọng
-                if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0
-                        || packageName.equals("com.android.vending")
-                        || packageName.equals("com.google.android.gms")) {
-
+                // Chỉ lấy app do người dùng cài
+                if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                     String appName = pm.getApplicationLabel(appInfo).toString();
                     Drawable icon = pm.getApplicationIcon(appInfo);
                     userApps.add(new AppInfo(appName, packageName, icon));
@@ -57,7 +54,6 @@ public class AppListActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-
         // Gán vào biến toàn cục
         this.appList = userApps;
 

@@ -22,6 +22,8 @@ public class SettingsActivity extends BaseActivity {
     private TextView tvCurrentPin;
     private Button btnChangePin, btnCheckPermissions;
     private SharedPreferences prefs;
+    private Button btnLogout;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class SettingsActivity extends BaseActivity {
         prefs = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE);
 
         // Ánh xạ view
+        btnLogout = findViewById(R.id.btnLogout);
         switchPin = findViewById(R.id.switch_pin);
         tvCurrentPin = findViewById(R.id.tvCurrentPin);
         btnChangePin = findViewById(R.id.btnChangePin);
@@ -64,6 +67,26 @@ public class SettingsActivity extends BaseActivity {
 
         // Kiểm tra quyền
         btnCheckPermissions.setOnClickListener(v -> checkPermissions());
+
+        btnLogout.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Đăng xuất")
+                    .setMessage("Bạn có chắc muốn đăng xuất khỏi ứng dụng?")
+                    .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                        // Xóa session người dùng
+                        SharedPreferences session = getSharedPreferences("USER_SESSION", MODE_PRIVATE);
+                        session.edit().remove("current_user").apply();
+
+                        Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+
+                        // Quay về màn hình đăng nhập và xóa history
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        });
     }
 
     private void updatePinDisplay() {
@@ -129,4 +152,5 @@ public class SettingsActivity extends BaseActivity {
                 .setNegativeButton("Hủy", null)
                 .show();
     }
+
 }

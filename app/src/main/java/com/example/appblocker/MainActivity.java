@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
 
         gm = new GamificationManager(this);
 
-        // ✅ Hoàn thành quest 1 khi mở app
+        // Hoàn thành quest 1 khi mở app
         gm.completeQuest("open_app");
 
         Spinner spinnerHours = findViewById(R.id.spinnerHours);
@@ -57,7 +57,7 @@ public class MainActivity extends BaseActivity {
         Button btnCancel = findViewById(R.id.btnCancel);
         bottomNav = findViewById(R.id.bottomNavigation);
 
-        // 🌟 Quote ngẫu nhiên
+        // Quote ngẫu nhiên
         String[] quotes = getResources().getStringArray(R.array.time_quotes);
         tvQuote.setText(quotes[new Random().nextInt(quotes.length)]);
         Animation fadeIn = new AlphaAnimation(0f, 1f);
@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity {
             PermissionUtils.requestUsageStatsPermission(this);
         }
 
-        // === Nút START ===
+        // Nút START
         btnStart.setOnClickListener(v -> {
             if (!hasUsageStatsPermission()) {
                 Toast.makeText(this, R.string.need_usage_permission, Toast.LENGTH_SHORT).show();
@@ -86,44 +86,40 @@ public class MainActivity extends BaseActivity {
                 return;
             }
 
-            // ✅ Đánh dấu đã bắt đầu timer (quest 2)
+            // Hoàn thành quest 2
             gm.completeQuest("start_timer");
 
-            // ✅ Bật chế độ chặn
+            // Bật chế độ chặn
             getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
                     .edit().putBoolean("isBlockingActive", true).apply();
 
-            startTimer(btnStart);
+            // Start timer và lưu vào TimerManager
+            TimerManager.getInstance().start(timeLimit);
+            startTimerFromManager(btnStart);
         });
 
-        // === Nút CANCEL ===
+        // Nút CANCEL
         btnCancel.setOnClickListener(v -> {
             if (!isRunning) {
                 Toast.makeText(this, R.string.no_timer_running, Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Lấy SharedPreferences
             SharedPreferences prefs = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE);
             boolean requirePin = prefs.getBoolean("require_pin", false);
 
             if (requirePin) {
-                // Nếu yêu cầu PIN, lấy pin lưu trong prefs và show dialog
                 String savedPin = prefs.getString("pin_code", "");
                 showPinConfirmDialog(savedPin);
             } else {
-                // Nếu không yêu cầu PIN, hủy timer ngay
                 cancelTimer();
-
-                // Tắt chế độ chặn
                 prefs.edit().putBoolean("isBlockingActive", false).apply();
-
                 Toast.makeText(this, R.string.timer_cancelled, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // === SETUP SPINNERS ===
+    // --- Spinner setup ---
     private void setupSpinners(Spinner spinnerHours, Spinner spinnerMinutes) {
         List<String> hours = new ArrayList<>();
         for (int i = 0; i <= 12; i++) hours.add(String.valueOf(i));
@@ -142,7 +138,6 @@ public class MainActivity extends BaseActivity {
         minutesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMinutes.setAdapter(minutesAdapter);
 
-
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedHours = Integer.parseInt(hours.get(position));
@@ -150,7 +145,6 @@ public class MainActivity extends BaseActivity {
             }
             @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
         });
-
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
@@ -161,26 +155,20 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    // === TIMER LOGIC ===
-    private void startTimer(Button btnStart) {
+    // --- Timer ---
+    private void startTimerFromManager(Button btnStart) {
+        long remaining = TimerManager.getInstance().getRemaining();
+        if (remaining <= 0) {
+            tvTimer.setText(R.string.time_up);
+            isRunning = false;
+            btnStart.setEnabled(true);
+            return;
+        }
+
         isRunning = true;
         btnStart.setEnabled(false);
 
-        countDownTimer = new CountDownTimer(timeLimit, 1000) {
-            @Override
-            public void onFinish() {
-                Toast.makeText(MainActivity.this, R.string.time_up, Toast.LENGTH_LONG).show();
-                isRunning = false;
-                btnStart.setEnabled(true);
-
-                // ✅ Hoàn thành quest 3 nếu user không cancel
-                gm.completeQuest("no_cancel");
-
-                // ✅ Tắt chặn khi hết thời gian
-                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
-                        .edit().putBoolean("isBlockingActive", false).apply();
-            }
-
+        countDownTimer = new CountDownTimer(remaining, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 long totalSeconds = millisUntilFinished / 1000;
@@ -201,11 +189,26 @@ public class MainActivity extends BaseActivity {
 
                 tvTimer.setText(totalText);
             }
+
+            @Override
+            public void onFinish() {
+                TimerManager.getInstance().cancel();
+                tvTimer.setText(R.string.time_up);
+                isRunning = false;
+                btnStart.setEnabled(true);
+
+                // Hoàn thành quest nếu user không cancel
+                gm.completeQuest("no_cancel");
+
+                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                        .edit().putBoolean("isBlockingActive", false).apply();
+            }
         }.start();
     }
 
     private void cancelTimer() {
         if (countDownTimer != null) countDownTimer.cancel();
+        TimerManager.getInstance().cancel();
         tvTimer.setText(R.string.cancelled);
         isRunning = false;
         findViewById(R.id.btnStart).setEnabled(true);
@@ -216,6 +219,7 @@ public class MainActivity extends BaseActivity {
         if (timeLimit == 0) timeLimit = 30 * 1000;
     }
 
+    // --- Permissions ---
     private boolean hasUsageStatsPermission() {
         try {
             AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
@@ -243,11 +247,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Khôi phục timer nếu còn chạy
+        if (TimerManager.getInstance().isRunning()) {
+            startTimerFromManager(findViewById(R.id.btnStart));
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (countDownTimer != null) countDownTimer.cancel();
     }
 
+    // --- PIN ---
     private void showPinConfirmDialog(String savedPin) {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -265,5 +279,4 @@ public class MainActivity extends BaseActivity {
                 .setNegativeButton("Hủy", null)
                 .show();
     }
-
 }

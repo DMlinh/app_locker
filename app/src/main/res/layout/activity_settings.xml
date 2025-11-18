@@ -94,7 +94,21 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:paddingVertical="12dp"/>
 
+            <!-- Nút đăng xuất -->
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Đăng xuất"
+                android:textAllCaps="false"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
+                android:paddingVertical="12dp"
+                android:layout_marginTop="16dp"/>
+
         </LinearLayout>
+
+
     </ScrollView>
 
     <!-- BottomNavigationView cố định dưới màn hình -->

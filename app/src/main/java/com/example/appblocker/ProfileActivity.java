@@ -32,12 +32,12 @@ public class ProfileActivity extends BaseActivity {
         ProgressBar xpBar = findViewById(R.id.progressRank);
         LinearLayout questList = findViewById(R.id.questList);
 
-//        // 🔄 Reset toàn bộ dữ liệu gamification (dùng tạm để test)
-//        gm.resetProgress();
-//        Toast.makeText(this, "Đã reset toàn bộ điểm và quest!", Toast.LENGTH_SHORT).show();
+        // 🔄 Reset toàn bộ dữ liệu gamification (dùng tạm để test)
+        gm.resetProgress();
+        Toast.makeText(this, "Đã reset toàn bộ điểm và quest!", Toast.LENGTH_SHORT).show();
 
-         //❌ Bỏ dòng test addPoints, để user kiếm điểm thật
-         gm.addPoints(300);
+        //Thêm điểm thủ công để test chức năng
+        // gm.addPoints(300);
 
         // 🔹 Hiển thị điểm & cấp bậc
         tvPoints.setText("🎯 Điểm tập trung: " + gm.getFocusPoints());
