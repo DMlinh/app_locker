@@ -18,8 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ProfileActivity extends BaseActivity {
-    private GamificationManager gm;
     private static final int PICK_IMAGE = 1001;
+    private GamificationManager gm;
     private ImageView imgAvatar;
     private SharedPreferences prefs;
     private String currentUser;
@@ -147,11 +147,20 @@ public class ProfileActivity extends BaseActivity {
 
         tvName.setText(name);
         switch (name) {
-            case "Dark": tvIcon.setText("🌑"); break;
-            case "Light": tvIcon.setText("☀️"); break;
-            case "Galaxy": tvIcon.setText("🌌"); break;
-            case "Neon": tvIcon.setText("🌈"); break;
-            default: tvIcon.setText("🎨");
+            case "Dark":
+                tvIcon.setText("🌑");
+                break;
+            case "Light":
+                tvIcon.setText("☀️");
+                break;
+            case "Galaxy":
+                tvIcon.setText("🌌");
+                break;
+            case "Neon":
+                tvIcon.setText("🌈");
+                break;
+            default:
+                tvIcon.setText("🎨");
         }
 
         ivLock.setVisibility(unlocked ? View.GONE : View.VISIBLE);
@@ -167,9 +176,15 @@ public class ProfileActivity extends BaseActivity {
         } else {
             int requiredPoints = 0;
             switch (name) {
-                case "Light": requiredPoints = 100; break;
-                case "Galaxy": requiredPoints = 200; break;
-                case "Neon": requiredPoints = 300; break;
+                case "Light":
+                    requiredPoints = 100;
+                    break;
+                case "Galaxy":
+                    requiredPoints = 200;
+                    break;
+                case "Neon":
+                    requiredPoints = 300;
+                    break;
             }
             int current = gm.getFocusPoints();
             int remaining = Math.max(requiredPoints - current, 0);

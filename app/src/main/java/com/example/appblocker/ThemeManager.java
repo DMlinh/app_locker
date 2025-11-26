@@ -7,8 +7,8 @@ import android.content.SharedPreferences;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class ThemeManager {
-    private static final String PREFS_NAME = "GamificationPrefs";
     public static final String ACTION_THEME_CHANGED = "com.example.appblocker.THEME_CHANGED";
+    private static final String PREFS_NAME = "GamificationPrefs";
 
     public static void setTheme(Context context, String themeName) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

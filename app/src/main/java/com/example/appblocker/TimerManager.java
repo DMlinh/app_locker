@@ -5,7 +5,8 @@ public class TimerManager {
     private long endTime = 0; // thời gian kết thúc thực tế
     private boolean isRunning = false;
 
-    private TimerManager() {}
+    private TimerManager() {
+    }
 
     public static TimerManager getInstance() {
         if (instance == null) instance = new TimerManager();

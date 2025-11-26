@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
-    android:background="?android:windowBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- 🖼 Avatar người dùng -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:paddingTop="8dp"
         android:paddingBottom="12dp">
 
@@ -21,21 +21,21 @@
             android:id="@+id/imgAvatar"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:src="@drawable/avatar1"
             android:background="@drawable/avatar_circle_bg"
-            android:scaleType="centerCrop"
-            android:padding="4dp"
-            android:contentDescription="Avatar"
-            android:clipToOutline="true"
             android:clickable="true"
-            android:focusable="true" />
+            android:clipToOutline="true"
+            android:contentDescription="Avatar"
+            android:focusable="true"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar1" />
     </LinearLayout>
     <!-- 🧑‍💼 Xin chào + icon Top Ranking -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingBottom="8dp">
 
         <TextView
@@ -44,19 +44,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Xin chào, UserName"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnPrimary" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btnLeaderboard"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_trophy"
-            android:contentDescription="Leaderboard"
-            android:padding="4dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:contentDescription="Leaderboard"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_trophy" />
     </LinearLayout>
 
     <!-- 🎯 Điểm tập trung -->
@@ -74,10 +74,10 @@
         android:id="@+id/tvRank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="🏆 Cấp bậc: Beginner"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"
         android:layout_marginTop="6dp"
+        android:text="🏆 Cấp bậc: Beginner"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <!-- 📈 Nhãn tiến trình -->
@@ -85,10 +85,10 @@
         android:id="@+id/tvProgressLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:text="Beginner (0/100)"
-        android:textSize="16sp"
         android:textColor="?attr/colorOnPrimary"
-        android:layout_marginTop="6dp" />
+        android:textSize="16sp" />
 
     <!-- 🔵 Thanh tiến trình -->
     <ProgressBar
@@ -97,8 +97,8 @@
         android:layout_width="250dp"
         android:layout_height="10dp"
         android:layout_marginTop="6dp"
-        android:progressTint="?attr/progressBarColor"
-        android:progress="0" />
+        android:progress="0"
+        android:progressTint="?attr/progressBarColor" />
 
     <!-- Divider -->
     <View
@@ -106,27 +106,27 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:background="?attr/colorPrimary"
-        android:alpha="0.3" />
+        android:alpha="0.3"
+        android:background="?attr/colorPrimary" />
 
     <!-- 🎯 Daily Quest section -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="🎯 Nhiệm vụ hằng ngày"
-        android:textStyle="bold"
-        android:textSize="18sp"
         android:textColor="?attr/colorOnPrimary"
-        android:layout_marginBottom="8dp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/questList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginBottom="12dp"
         android:divider="?android:attr/dividerVertical"
-        android:showDividers="middle"
-        android:layout_marginBottom="12dp" />
+        android:orientation="vertical"
+        android:showDividers="middle" />
 
     <!-- Divider -->
     <View
@@ -134,30 +134,30 @@
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="?attr/colorPrimary"
-        android:alpha="0.3" />
+        android:alpha="0.3"
+        android:background="?attr/colorPrimary" />
 
     <!-- 🌈 Danh sách theme -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         android:text="🎨 Giao diện"
-        android:textStyle="bold"
-        android:textSize="18sp"
         android:textColor="?attr/colorOnPrimary"
-        android:layout_marginBottom="6dp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="4dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:id="@+id/themeList"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingBottom="24dp" />
     </ScrollView>
 
@@ -166,22 +166,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="6dp"
+        android:background="@android:color/transparent"
         android:paddingVertical="8dp"
-        android:background="@android:color/transparent">
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:windowBackground"
             android:paddingTop="4dp"
             android:paddingBottom="12dp"
             app:itemIconTint="@color/selector_nav_color"
             app:itemTextColor="@color/selector_nav_color"
-            app:menu="@menu/bottom_nav_menu"
-            android:background="?android:windowBackground"
-            app:labelVisibilityMode="labeled"/>
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

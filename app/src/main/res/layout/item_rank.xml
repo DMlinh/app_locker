@@ -1,19 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/txtRank"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:text="1"
-        android:textStyle="bold"
+        android:textColor="?attr/colorOnPrimary"
         android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"/>
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/imgAvatar"
@@ -21,10 +21,10 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/avatar1"
         android:clipToOutline="true"
-        android:outlineProvider="background"/>
+        android:outlineProvider="background"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar1" />
 
     <TextView
         android:id="@+id/txtName"
@@ -32,14 +32,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="User"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"/>
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/txtPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="120 pts"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnPrimary"/>
+        android:textColor="?attr/colorOnPrimary"
+        android:textStyle="bold" />
 </LinearLayout>

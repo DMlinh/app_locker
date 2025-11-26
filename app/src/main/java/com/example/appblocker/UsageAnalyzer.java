@@ -8,7 +8,12 @@ import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class UsageAnalyzer {
 

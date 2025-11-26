@@ -1,4 +1,3 @@
-
 package com.example.appblocker;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -32,13 +31,14 @@ import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends BaseActivity {
+    SharedPreferences prefs;
     private TextView tvTimer, tvQuote;
     private CountDownTimer countDownTimer;
     private long timeLimit = 30 * 1000; // mặc định 30s
     private boolean isRunning = false;
     private int selectedHours = 0, selectedMinutes = 0;
     private GamificationManager gm;
-    SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,19 +145,27 @@ public class MainActivity extends BaseActivity {
         spinnerMinutes.setAdapter(minutesAdapter);
 
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override
+            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedHours = Integer.parseInt(hours.get(position));
                 updateTimeLimit();
             }
-            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {
+            }
         });
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override
+            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedMinutes = Integer.parseInt(minutes.get(position));
                 updateTimeLimit();
             }
-            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {
+            }
         });
     }
 

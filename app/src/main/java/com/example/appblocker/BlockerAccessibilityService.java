@@ -10,9 +10,9 @@ public class BlockerAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        boolean isBlockingActive = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE).getBoolean("isBlockingActive",false);
+        boolean isBlockingActive = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE).getBoolean("isBlockingActive", false);
 
-        if (!isBlockingActive){
+        if (!isBlockingActive) {
             return;
         }
 

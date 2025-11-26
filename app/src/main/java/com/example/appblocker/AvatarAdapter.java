@@ -9,8 +9,8 @@ import android.widget.ImageView;
 
 public class AvatarAdapter extends BaseAdapter {
 
-    private Context context;
-    private int[] avatars;
+    private final Context context;
+    private final int[] avatars;
 
     public AvatarAdapter(Context context, int[] avatars) {
         this.context = context;
@@ -18,13 +18,19 @@ public class AvatarAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() { return avatars.length; }
+    public int getCount() {
+        return avatars.length;
+    }
 
     @Override
-    public Object getItem(int i) { return avatars[i]; }
+    public Object getItem(int i) {
+        return avatars[i];
+    }
 
     @Override
-    public long getItemId(int i) { return i; }
+    public long getItemId(int i) {
+        return i;
+    }
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {

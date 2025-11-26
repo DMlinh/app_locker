@@ -1,20 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
 
     <!-- 🌈 Icon của theme -->
     <TextView
         android:id="@+id/tvThemeIcon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:text="🌑"
-        android:textSize="20sp"
+        android:layout_marginEnd="12dp"
         android:gravity="center"
-        android:layout_marginEnd="12dp" />
+        android:text="🌑"
+        android:textSize="20sp" />
 
     <!-- Tên theme -->
     <TextView
@@ -32,6 +32,6 @@
         android:id="@+id/ivLock"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_lock"
-        android:contentDescription="@string/locked" />
+        android:contentDescription="@string/locked"
+        android:src="@drawable/ic_lock" />
 </LinearLayout>

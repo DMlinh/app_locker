@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    android:orientation="vertical">
 
     <!-- 🔹 Khu vực nội dung chính (cuộn được) -->
     <LinearLayout
@@ -25,12 +25,12 @@
             android:id="@+id/tvTotalUsage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total usage: 0 phút 0 giây"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnPrimary"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:text="Total usage: 0 phút 0 giây"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <!-- Danh sách ứng dụng (cuộn riêng) -->
         <ScrollView
@@ -43,10 +43,10 @@
                 android:id="@+id/appListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:divider="?android:attr/dividerVertical"
-                android:showDividers="middle"
-                android:padding="8dp" />
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:showDividers="middle" />
         </ScrollView>
     </LinearLayout>
 
@@ -56,22 +56,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="6dp"
+        android:background="@android:color/transparent"
         android:paddingVertical="8dp"
-        android:background="@android:color/transparent">
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?android:windowBackground"
             android:paddingTop="4dp"
             android:paddingBottom="12dp"
             app:itemIconTint="@color/selector_nav_color"
             app:itemTextColor="@color/selector_nav_color"
-            app:menu="@menu/bottom_nav_menu"
-            android:background="?android:windowBackground"
-            app:labelVisibilityMode="labeled"/>
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
     </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

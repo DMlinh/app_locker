@@ -11,9 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
 
-    private ArrayList<UserRank> list;
+    private final ArrayList<UserRank> list;
 
     public RankAdapter(ArrayList<UserRank> list) {
         this.list = list;

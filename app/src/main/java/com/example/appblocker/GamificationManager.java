@@ -12,13 +12,11 @@ import java.util.Calendar;
 public class GamificationManager {
 
     private static final String PREFS_NAME = "GamificationPrefs";
-
-    private String uid = "default"; // sẽ đổi khi login
     private final SharedPreferences prefs;
-
-    private Context context;
-    private String currentUser;
-    private UserDatabaseHelper dbHelper;
+    private String uid = "default"; // sẽ đổi khi login
+    private final Context context;
+    private final String currentUser;
+    private final UserDatabaseHelper dbHelper;
 
     public GamificationManager(Context ctx) {
         this.context = ctx;
@@ -45,14 +43,29 @@ public class GamificationManager {
         return base + "_" + uid;
     }
 
-    private int getInt(String key, int def) { return prefs.getInt(key(key), def); }
-    private void putInt(String key, int val) { prefs.edit().putInt(key(key), val).apply(); }
+    private int getInt(String key, int def) {
+        return prefs.getInt(key(key), def);
+    }
 
-    private String getString(String key, String def) { return prefs.getString(key(key), def); }
-    private void putString(String key, String val) { prefs.edit().putString(key(key), val).apply(); }
+    private void putInt(String key, int val) {
+        prefs.edit().putInt(key(key), val).apply();
+    }
 
-    private long getLong(String key, long def) { return prefs.getLong(key(key), def); }
-    private void putLong(String key, long val) { prefs.edit().putLong(key(key), val).apply(); }
+    private String getString(String key, String def) {
+        return prefs.getString(key(key), def);
+    }
+
+    private void putString(String key, String val) {
+        prefs.edit().putString(key(key), val).apply();
+    }
+
+    private long getLong(String key, long def) {
+        return prefs.getLong(key(key), def);
+    }
+
+    private void putLong(String key, long val) {
+        prefs.edit().putLong(key(key), val).apply();
+    }
 
     // ============================================================
     //  FOCUS POINTS (đồng bộ DB + SP)
@@ -123,7 +136,9 @@ public class GamificationManager {
                     .put("reward", 15)
                     .put("completed", false));
 
-        } catch (JSONException e) { e.printStackTrace(); }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         saveDailyQuests(quests);
     }
@@ -132,7 +147,9 @@ public class GamificationManager {
         try {
             String json = getString("daily_quests", "");
             if (!json.isEmpty()) return new JSONArray(json);
-        } catch (JSONException e) { e.printStackTrace(); }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return new JSONArray();
     }
 
@@ -144,7 +161,9 @@ public class GamificationManager {
                 if (q.getString("id").equals(questId)) {
                     return q.getBoolean("completed");
                 }
-            } catch (JSONException e) { e.printStackTrace(); }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
@@ -161,21 +180,36 @@ public class GamificationManager {
                     addPoints(q.getInt("reward"));
                     updated = true;
                 }
-            } catch (JSONException e) { e.printStackTrace(); }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         if (updated) saveDailyQuests(arr);
     }
 
+    public String getCurrentTheme() {
+        return getString("current_theme", "Dark");
+    }
+
     // ============================================================
     // THEME
     // ============================================================
-    public void setCurrentTheme(String theme) { putString("current_theme", theme); }
-    public String getCurrentTheme() { return getString("current_theme", "Dark"); }
+    public void setCurrentTheme(String theme) {
+        putString("current_theme", theme);
+    }
 
-    public boolean isLightUnlocked() { return getFocusPoints() >= 100; }
-    public boolean isGalaxyUnlocked() { return getFocusPoints() >= 200; }
-    public boolean isNeonUnlocked() { return getFocusPoints() >= 300; }
+    public boolean isLightUnlocked() {
+        return getFocusPoints() >= 100;
+    }
+
+    public boolean isGalaxyUnlocked() {
+        return getFocusPoints() >= 200;
+    }
+
+    public boolean isNeonUnlocked() {
+        return getFocusPoints() >= 300;
+    }
 
     // ============================================================
     // XP / Rank Progress
@@ -231,11 +265,16 @@ public class GamificationManager {
     // Kiểm tra user có đủ điểm để dùng theme
     public boolean canUseTheme(String theme) {
         switch (theme) {
-            case "Dark": return true;                 // luôn unlock
-            case "Light": return isLightUnlocked();   // >=100 điểm
-            case "Galaxy": return isGalaxyUnlocked(); // >=200 điểm
-            case "Neon": return isNeonUnlocked();     // >=300 điểm
-            default: return false;
+            case "Dark":
+                return true;                 // luôn unlock
+            case "Light":
+                return isLightUnlocked();   // >=100 điểm
+            case "Galaxy":
+                return isGalaxyUnlocked(); // >=200 điểm
+            case "Neon":
+                return isNeonUnlocked();     // >=300 điểm
+            default:
+                return false;
         }
     }
 
