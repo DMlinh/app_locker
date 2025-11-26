@@ -42,6 +42,10 @@
 
         <!-- SettingsActivity (màn chọn để tùy chỉnh các lựa chọn setting) -->
         <activity android:name=".SettingsActivity"/>
+
+        <!-- RankingActivity (màn chọn để xem cấp bậc người dùng) -->
+        <activity android:name=".RankingActivity"/>
+
         <!-- Accessibility Service -->
         <service
             android:name=".BlockerAccessibilityService"

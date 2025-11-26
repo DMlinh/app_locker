@@ -1,8 +1,12 @@
 package com.example.appblocker;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,6 +19,10 @@ import org.json.JSONObject;
 
 public class ProfileActivity extends BaseActivity {
     private GamificationManager gm;
+    private static final int PICK_IMAGE = 1001;
+    private ImageView imgAvatar;
+    private SharedPreferences prefs;
+    private String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,20 @@ public class ProfileActivity extends BaseActivity {
 
         gm = new GamificationManager(this);
 
+        // load current user
+        currentUser = getSharedPreferences("USER_SESSION", MODE_PRIVATE)
+                .getString("current_user", null);
+        gm.setUser(currentUser);
+
+        // set theme theo user hiện tại
+        String theme = ThemeManager.getUserTheme(this, currentUser);
+        if (!gm.canUseTheme(theme)) {
+            theme = "Dark"; // fallback nếu chưa đủ điểm
+        }
+        ThemeManager.setTheme(this, theme);
+
+        TextView tvHello = findViewById(R.id.tvHello);
+        ImageView btnLeaderboard = findViewById(R.id.btnLeaderboard);
         bottomNav = findViewById(R.id.bottomNavigation);
         TextView tvPoints = findViewById(R.id.tvPoints);
         TextView tvRank = findViewById(R.id.tvRank);
@@ -32,39 +54,54 @@ public class ProfileActivity extends BaseActivity {
         ProgressBar xpBar = findViewById(R.id.progressRank);
         LinearLayout questList = findViewById(R.id.questList);
 
-        // 🔄 Reset toàn bộ dữ liệu gamification (dùng tạm để test)
-        gm.resetProgress();
-        Toast.makeText(this, "Đã reset toàn bộ điểm và quest!", Toast.LENGTH_SHORT).show();
-
-        //Thêm điểm thủ công để test chức năng
-        // gm.addPoints(300);
-
-        // 🔹 Hiển thị điểm & cấp bậc
+        // hiển thị điểm & cấp bậc
+        tvHello.setText("Xin chào " + (currentUser != null ? currentUser : "Người dùng") + "!");
         tvPoints.setText("🎯 Điểm tập trung: " + gm.getFocusPoints());
         tvRank.setText("🏆 Cấp bậc: " + gm.getRank());
         rankText.setText(gm.getProgressText() + " → " + gm.getNextRankName());
         xpBar.setProgress((int) (gm.getProgressPercent() * 100));
 
-        // 🔹 Hiển thị theme
+        // hiển thị theme
         themeList.addView(createThemeItem("Dark", true));
         themeList.addView(createThemeItem("Light", gm.isLightUnlocked()));
         themeList.addView(createThemeItem("Galaxy", gm.isGalaxyUnlocked()));
         themeList.addView(createThemeItem("Neon", gm.isNeonUnlocked()));
 
-        // 🔹 Hiển thị danh sách quest
+        // hiển thị quest
         displayDailyQuests(questList);
 
-        // 🔹 Cập nhật lại giao diện sau khi load quest
+        // cập nhật lại UI
         tvPoints.setText("🎯 Điểm tập trung: " + gm.getFocusPoints());
         tvRank.setText("🏆 Cấp bậc: " + gm.getRank());
         rankText.setText(gm.getProgressText() + " → " + gm.getNextRankName());
         xpBar.setProgress((int) (gm.getProgressPercent() * 100));
 
+        btnLeaderboard.setOnClickListener(v -> {
+            v.animate()
+                    .scaleX(0.85f).scaleY(0.85f).setDuration(120)
+                    .withEndAction(() -> {
+                        v.animate().scaleX(1f).scaleY(1f).setDuration(120).start();
+                        startActivity(new Intent(ProfileActivity.this, RankingActivity.class));
+                    }).start();
+        });
+
+        imgAvatar = findViewById(R.id.imgAvatar);
+        prefs = getSharedPreferences("AvatarPrefs", MODE_PRIVATE);
+
+        // load avatar theo user
+        String savedAvatar = prefs.getString("avatar_uri_" + currentUser, null);
+        if (savedAvatar != null) {
+            if (savedAvatar.startsWith("res:")) {
+                int resId = Integer.parseInt(savedAvatar.replace("res:", ""));
+                imgAvatar.setImageResource(resId);
+            } else {
+                imgAvatar.setImageURI(Uri.parse(savedAvatar));
+            }
+        }
+
+        imgAvatar.setOnClickListener(v -> openAvatarChooser());
     }
 
-    /**
-     * Hiển thị danh sách nhiệm vụ hàng ngày
-     */
     private void displayDailyQuests(LinearLayout questList) {
         questList.removeAllViews();
 
@@ -88,11 +125,9 @@ public class ProfileActivity extends BaseActivity {
                 TextView tvReward = questItem.findViewById(R.id.tvQuestReward);
                 ImageView ivCheck = questItem.findViewById(R.id.ivQuestDone);
 
-                // 🔹 Hiển thị tiêu đề và điểm thưởng
                 tvQuest.setText(q.getString("title"));
                 tvReward.setText("+" + q.getInt("reward") + " điểm");
 
-                // 🔹 Nếu quest đã hoàn thành, làm mờ + hiện check icon
                 boolean done = q.getBoolean("completed");
                 ivCheck.setVisibility(done ? View.VISIBLE : View.INVISIBLE);
                 questItem.setAlpha(done ? 0.6f : 1f);
@@ -104,9 +139,6 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Hiển thị danh sách theme + chọn theme khi mở khóa
-     */
     private View createThemeItem(String name, boolean unlocked) {
         View item = getLayoutInflater().inflate(R.layout.item_theme, null);
         TextView tvName = item.findViewById(R.id.tvThemeName);
@@ -114,7 +146,6 @@ public class ProfileActivity extends BaseActivity {
         ImageView ivLock = item.findViewById(R.id.ivLock);
 
         tvName.setText(name);
-
         switch (name) {
             case "Dark": tvIcon.setText("🌑"); break;
             case "Light": tvIcon.setText("☀️"); break;
@@ -128,40 +159,84 @@ public class ProfileActivity extends BaseActivity {
 
         if (unlocked) {
             item.setOnClickListener(v -> {
+                ThemeManager.setUserTheme(this, currentUser, name);
                 ThemeManager.setTheme(this, name);
                 recreate();
                 Toast.makeText(this, "Đã chọn theme: " + name, Toast.LENGTH_SHORT).show();
             });
         } else {
-            // 🔹 Xác định số điểm cần thiết để mở khóa
             int requiredPoints = 0;
             switch (name) {
-                case "Light":
-                    requiredPoints = 100;
-                    break;
-                case "Galaxy":
-                    requiredPoints = 200;
-                    break;
-                case "Neon":
-                    requiredPoints = 300;
-                    break;
+                case "Light": requiredPoints = 100; break;
+                case "Galaxy": requiredPoints = 200; break;
+                case "Neon": requiredPoints = 300; break;
             }
-
             int current = gm.getFocusPoints();
             int remaining = Math.max(requiredPoints - current, 0);
-
-            String message;
-            if (requiredPoints > 0)
-                message = "🔒 Cần " + requiredPoints + " điểm để mở khóa theme " + name
-                        + " (thiếu " + remaining + " điểm)";
-            else
-                message = "🔒 Theme này chưa khả dụng.";
-
+            String message = requiredPoints > 0
+                    ? "🔒 Cần " + requiredPoints + " điểm để mở khóa theme " + name
+                    + " (thiếu " + remaining + " điểm)"
+                    : "🔒 Theme này chưa khả dụng.";
             final String toastMessage = message;
-            item.setOnClickListener(v ->
-                    Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show());
+            item.setOnClickListener(v -> Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show());
         }
 
         return item;
+    }
+
+    private void openAvatarChooser() {
+        String[] options = {"Chọn từ thư viện", "Chọn avatar có sẵn"};
+
+        new AlertDialog.Builder(this)
+                .setTitle("Chọn Avatar")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) pickFromGallery();
+                    else showDefaultAvatars();
+                })
+                .show();
+    }
+
+    private void pickFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            imgAvatar.setImageURI(uri);
+            prefs.edit().putString("avatar_uri_" + currentUser, uri.toString()).apply();
+        }
+    }
+
+    private void showDefaultAvatars() {
+        int[] avatarRes = {
+                R.drawable.avatar1,
+                R.drawable.avatar2,
+                R.drawable.avatar3,
+                R.drawable.avatar4,
+                R.drawable.avatar5
+        };
+
+        GridView grid = new GridView(this);
+        grid.setNumColumns(3);
+        grid.setAdapter(new AvatarAdapter(this, avatarRes));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Chọn Avatar")
+                .setView(grid)
+                .create();
+
+        grid.setOnItemClickListener((parent, view, position, id) -> {
+            imgAvatar.setImageResource(avatarRes[position]);
+            prefs.edit().putString("avatar_uri_" + currentUser, "res:" + avatarRes[position]).apply();
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 }

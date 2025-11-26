@@ -42,7 +42,15 @@ public class LoginActivity extends BaseActivity {
             String p = edtPass.getText().toString();
 
             if (db.loginUser(u, p)) {
+
+                // Lưu user hiện tại vào SESSION
                 prefs.edit().putString("current_user", u).apply();
+
+                // ===== 🔥 QUAN TRỌNG: gán UID cho GamificationManager =====
+                GamificationManager gm = new GamificationManager(this);
+                gm.setUser(u);   // <-- bắt buộc!
+                // ===========================================================
+
                 Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(this, MainActivity.class));

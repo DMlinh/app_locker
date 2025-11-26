@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="?attr/colorBackground">
+    android:background="?android:windowBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:text="Tạo tài khoản"
             android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnBackground"
+            android:textColor="?attr/colorOnPrimary"
             android:layout_marginBottom="20dp"/>
 
         <EditText
@@ -28,7 +28,9 @@
             android:layout_height="wrap_content"
             android:hint="Tên đăng nhập"
             android:inputType="textPersonName"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="?attr/colorOnPrimary"/>
 
         <EditText
             android:id="@+id/edtPassword"
@@ -37,7 +39,9 @@
             android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:layout_marginTop="12dp"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="?attr/colorOnPrimary"/>
 
         <EditText
             android:id="@+id/edtConfirm"
@@ -46,7 +50,9 @@
             android:hint="Nhập lại mật khẩu"
             android:inputType="textPassword"
             android:layout_marginTop="12dp"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:textColor="?attr/colorOnPrimary"
+            android:textColorHint="?attr/colorOnPrimary"/>
 
         <Button
             android:id="@+id/btnRegister"
@@ -55,9 +61,8 @@
             android:text="Đăng ký"
             android:textAllCaps="false"
             android:layout_marginTop="24dp"
-            android:backgroundTint="@color/background_light"
-            android:textColor="@color/background_dark"
-            android:paddingVertical="12dp"/>
+            android:paddingVertical="12dp"
+            android:background="@drawable/rounded_button"/>
 
     </LinearLayout>
 </ScrollView>
