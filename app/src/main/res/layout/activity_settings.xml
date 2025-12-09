@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="?android:windowBackground">
+    android:background="?android:windowBackground"
+    android:orientation="vertical">
 
     <!-- Scroll nội dung chính -->
     <ScrollView
@@ -16,26 +16,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="top">
+            android:gravity="top"
+            android:orientation="vertical">
 
             <!-- Tiêu đề -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
                 android:text="Cài đặt ứng dụng"
-                android:textSize="22sp"
-                android:textStyle="bold"
                 android:textColor="?attr/colorOnPrimary"
-                android:paddingBottom="16dp" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-            <!-- 🔐 Cài đặt mã PIN -->
+            <!-- 🔐 Bật yêu cầu PIN -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingVertical="12dp">
 
                 <TextView
@@ -43,84 +43,131 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Yêu cầu mã PIN khi Cancel"
-                    android:textSize="16sp"
-                    android:textColor="?attr/colorOnPrimary"/>
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="16sp" />
 
                 <Switch
                     android:id="@+id/switch_pin"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                </Switch>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
-            <!-- PIN hiện tại -->
-            <TextView
-                android:id="@+id/tvCurrentPin"
-                android:layout_width="wrap_content"
+            <!-- OPTIONAL: hidden EditText nếu bạn muốn người dùng nhập PIN trực tiếp -->
+            <EditText
+                android:id="@+id/etPin"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chưa thiết lập PIN"
-                android:textSize="16sp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Nhập mã PIN"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:padding="12dp"
                 android:textColor="?attr/colorOnPrimary"
-                android:paddingVertical="8dp"/>
+                android:textColorHint="?attr/colorOnPrimary"
+                android:visibility="gone" />
+
+            <!-- PIN hiện tại + icon mắt (nằm ngang) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tvCurrentPin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Chưa thiết lập PIN"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ivTogglePin"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Toggle show PIN"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_eye_closed" />
+            </LinearLayout>
 
             <!-- Nút đổi PIN -->
             <Button
                 android:id="@+id/btnChangePin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="?attr/colorPrimary"
+                android:paddingVertical="12dp"
                 android:text="Đổi PIN"
                 android:textAllCaps="false"
-                android:backgroundTint="?attr/colorPrimary"
-                android:textColor="?attr/colorOnPrimary"
-                android:layout_marginBottom="16dp"
-                android:paddingVertical="12dp"/>
+                android:textColor="?attr/colorOnPrimary" />
 
             <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="?attr/colorOutline"
-                android:layout_marginVertical="16dp" />
+                android:layout_marginVertical="16dp"
+                android:background="?attr/colorOutline" />
 
             <!-- Kiểm tra quyền -->
             <Button
                 android:id="@+id/btnCheckPermissions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:paddingVertical="12dp"
                 android:text="Kiểm tra quyền truy cập"
                 android:textAllCaps="false"
-                android:backgroundTint="?attr/colorPrimary"
-                android:textColor="?attr/colorOnPrimary"
-                android:paddingVertical="12dp"/>
+                android:textColor="?attr/colorOnPrimary" />
 
-            <!-- Nút đăng xuất -->
+            <!-- Thiết lập khung giờ được phép -->
             <Button
-                android:id="@+id/btnLogout"
+                android:id="@+id/btnAllowedTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đăng xuất"
-                android:textAllCaps="false"
-                android:backgroundTint="?attr/colorPrimary"
-                android:textColor="?attr/colorOnPrimary"
+                android:layout_marginTop="12dp"
                 android:paddingVertical="12dp"
-                android:layout_marginTop="16dp"/>
+                android:text="Thiết lập khung giờ được phép"
+                android:textAllCaps="false" />
+
+            <TextView
+                android:id="@+id/tvAllowedWindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Khung giờ được phép: (chưa thiết lập)"
+                android:textSize="14sp" />
 
         </LinearLayout>
-
-
     </ScrollView>
 
     <!-- BottomNavigationView cố định dưới màn hình -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:windowBackground"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/selector_nav_color"
-        app:itemTextColor="@color/selector_nav_color"
-        app:labelVisibilityMode="labeled" />
+        android:layout_margin="16dp"
+        android:background="@android:color/transparent"
+        android:paddingVertical="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:windowBackground"
+            android:paddingTop="4dp"
+            android:paddingBottom="12dp"
+            app:itemIconTint="@color/selector_nav_color"
+            app:itemTextColor="@color/selector_nav_color"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

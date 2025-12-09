@@ -47,6 +47,5 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.0")
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
 // (tùy chọn cho loading)
-
     implementation("androidx.appcompat:appcompat:1.6.1")
 }

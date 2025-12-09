@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
-    private Context context;
-    private List<AppInfo> appList;
-    private Set<String> blockedApps;
+    private final Context context;
+    private final List<AppInfo> appList;
+    private final Set<String> blockedApps;
 
     public AppAdapter(Context context, List<AppInfo> appList, Set<String> blockedApps) {
         this.context = context;

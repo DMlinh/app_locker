@@ -10,12 +10,10 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    protected BottomNavigationView bottomNav;
-    private String lastTheme;
 
     private final BroadcastReceiver themeReceiver = new BroadcastReceiver() {
         @Override
@@ -23,6 +21,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             recreate(); // Reload khi theme đổi nếu activity đang foreground
         }
     };
+    protected BottomNavigationView bottomNav;
+    private String lastTheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             } else if (id == R.id.nav_profile && currentItemId != R.id.nav_profile) {
                 navigateTo(ProfileActivity.class, R.anim.slide_in_up, R.anim.slide_out_down);
                 return true;
-            }
-            else if (id == R.id.nav_settings) {
+            } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(this, SettingsActivity.class));
                 overridePendingTransition(0, 0);
                 return true;

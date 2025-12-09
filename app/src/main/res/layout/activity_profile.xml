@@ -1,125 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
-    android:background="?android:windowBackground"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:windowBackground"
+    android:orientation="vertical">
 
-    <!-- 🎯 Điểm tập trung -->
-    <TextView
-        android:id="@+id/tvPoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🎯 Điểm tập trung: 0"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <!-- 🏆 Cấp bậc -->
-    <TextView
-        android:id="@+id/tvRank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🏆 Cấp bậc: Beginner"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"
-        android:layout_marginTop="6dp"
-        android:textStyle="bold" />
-
-    <!-- 📈 Nhãn tiến trình -->
-    <TextView
-        android:id="@+id/tvProgressLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Beginner (0/100)"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnPrimary"
-        android:layout_marginTop="6dp" />
-
-    <!-- 🔵 Thanh tiến trình -->
-    <ProgressBar
-        android:id="@+id/progressRank"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="250dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="6dp"
-        android:progressTint="?attr/progressBarColor"
-        android:progress="0" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="?attr/colorPrimary"
-        android:alpha="0.3" />
-
-    <!-- 🎯 Daily Quest section -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🎯 Nhiệm vụ hằng ngày"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"
-        android:layout_marginBottom="8dp" />
-
-    <LinearLayout
-        android:id="@+id/questList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:divider="?android:attr/dividerVertical"
-        android:showDividers="middle"
-        android:layout_marginBottom="12dp" />
-
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="?attr/colorPrimary"
-        android:alpha="0.3" />
-
-    <!-- 🌈 Danh sách theme -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🎨 Giao diện"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:textColor="?attr/colorOnPrimary"
-        android:layout_marginBottom="6dp" />
-
+    <!-- Nội dung cuộn -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="4dp">
+        android:padding="16dp">
 
         <LinearLayout
-            android:id="@+id/themeList"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <!-- Avatar -->
+            <ImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/avatar1" />
+
+            <ImageView
+                android:id="@+id/btnRanking"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="12dp"
+                android:contentDescription="Ranking"
+                android:src="@drawable/ic_trophy" />
+
+            <!-- Tên người dùng -->
+            <EditText
+                android:id="@+id/edtProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:hint="Nhập tên của bạn"
+                android:imeOptions="actionDone"
+                android:minWidth="180dp"
+                android:singleLine="true"
+                android:textColor="?attr/colorOnPrimary"
+                android:textColorHint="#888"
+                android:textSize="18sp" />
+
+            <!-- Điểm -->
+            <TextView
+                android:id="@+id/tvPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Điểm: 0"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Rank -->
+            <TextView
+                android:id="@+id/tvRank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Cấp bậc: Beginner"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Label -->
+            <TextView
+                android:id="@+id/tvProgressLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Beginner (0/100)"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp" />
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressRank"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="250dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="6dp"
+                android:progress="0"
+                android:progressTint="?attr/progressBarColor" />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="16dp"
+                android:alpha="0.3"
+                android:background="?attr/colorPrimary" />
+
+            <!-- Daily Quest -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="🎯 Nhiệm vụ hằng ngày"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/questList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:divider="?android:attr/dividerVertical"
+                android:orientation="vertical"
+                android:showDividers="middle" />
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:alpha="0.3"
+                android:background="?attr/colorPrimary" />
+
+            <!-- Themes -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎨 Giao diện"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/themeList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="48dp" />
+
+        </LinearLayout>
     </ScrollView>
 
-    <!-- 🧭 Thanh điều hướng dưới cùng -->
+    <!-- Thanh điều hướng cố định -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="?android:windowBackground"
-        app:menu="@menu/bottom_nav_menu"
         app:itemIconTint="@color/selector_nav_color"
         app:itemTextColor="@color/selector_nav_color"
-        app:labelVisibilityMode="labeled" />
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>

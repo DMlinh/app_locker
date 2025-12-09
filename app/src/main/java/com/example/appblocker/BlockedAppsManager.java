@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BlockedAppsManager {
-    private static final String PREFS_NAME = "BlockedAppsPrefs";
+
+    // CHỈ DÙNG 1 PREFS CHO TOÀN BỘ APP
+    private static final String PREFS_NAME = "AppBlockerPrefs";
     private static final String KEY_BLOCKED_APPS = "blocked_apps";
 
     // ➕ Thêm app vào danh sách bị chặn
@@ -15,7 +17,7 @@ public class BlockedAppsManager {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Set<String> blockedApps = new HashSet<>(prefs.getStringSet(KEY_BLOCKED_APPS, new HashSet<>()));
 
-        // Không cho chặn chính AppBlocker
+        // ❌ Không cho phép chặn chính AppBlocker
         if (!packageName.equals(context.getPackageName())) {
             blockedApps.add(packageName);
             prefs.edit().putStringSet(KEY_BLOCKED_APPS, blockedApps).apply();
@@ -27,6 +29,7 @@ public class BlockedAppsManager {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Set<String> blockedApps = new HashSet<>(prefs.getStringSet(KEY_BLOCKED_APPS, new HashSet<>()));
         blockedApps.remove(packageName);
+
         prefs.edit().putStringSet(KEY_BLOCKED_APPS, blockedApps).apply();
     }
 
@@ -35,7 +38,7 @@ public class BlockedAppsManager {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Set<String> blocked = new HashSet<>(prefs.getStringSet(KEY_BLOCKED_APPS, new HashSet<>()));
 
-        // 🔹 Xóa chính AppBlocker khỏi danh sách bị chặn
+        // ❌ Luôn loại chính AppBlocker (phòng trường hợp dữ liệu cũ còn sót)
         blocked.remove(context.getPackageName());
 
         return blocked;

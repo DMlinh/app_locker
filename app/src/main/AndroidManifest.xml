@@ -2,9 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Cần thêm dòng này -->
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
     <application
@@ -17,19 +19,13 @@
 
         <!-- LoginActivity -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- RegisterActivity (màn chọn để đăng ký ) -->
-        <activity android:name=".RegisterActivity"/>
-
-        <!-- MainActivity (màn hình giao diện chính) -->
-        <activity android:name=".MainActivity"/>
 
         <!-- AppListActivity (màn chọn ứng dụng để chặn) -->
         <activity android:name=".AppListActivity" />
@@ -38,15 +34,19 @@
         <activity android:name=".UsageChartActivity" />
 
         <!-- ProfileActivity (màn chọn để đổi themes dựa trên Rank,Points) -->
-        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".ProfileActivity" />
 
         <!-- SettingsActivity (màn chọn để tùy chỉnh các lựa chọn setting) -->
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SettingsActivity" />
+
+        <!-- RankingActivity (màn chọn để xem cấp bậc người dùng) -->
+        <activity android:name=".RankingActivity" />
+
         <!-- Accessibility Service -->
         <service
             android:name=".BlockerAccessibilityService"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:exported="false">
+            android:exported="false"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

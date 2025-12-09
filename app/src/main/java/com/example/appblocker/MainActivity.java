@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends BaseActivity {
+    SharedPreferences prefs;
     private TextView tvTimer, tvQuote;
     private CountDownTimer countDownTimer;
     private long timeLimit = 30 * 1000; // mặc định 30s
@@ -44,7 +45,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setupBottomNav(R.id.nav_home);
 
+        // ⚡ Khởi tạo SharedPreferences trước khi dùng
+        prefs = getSharedPreferences("USER_SESSION", MODE_PRIVATE);
+
         gm = new GamificationManager(this);
+        String currentUser = prefs.getString("current_user", null);
+        gm.setUser(currentUser);
+
 
         // Hoàn thành quest 1 khi mở app
         gm.completeQuest("open_app");
@@ -94,7 +101,7 @@ public class MainActivity extends BaseActivity {
                     .edit().putBoolean("isBlockingActive", true).apply();
 
             // Start timer và lưu vào TimerManager
-            TimerManager.getInstance().start(timeLimit);
+            TimerManager.getInstance(this).start(timeLimit);
             startTimerFromManager(btnStart);
         });
 
@@ -105,15 +112,15 @@ public class MainActivity extends BaseActivity {
                 return;
             }
 
-            SharedPreferences prefs = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE);
-            boolean requirePin = prefs.getBoolean("require_pin", false);
+            SharedPreferences appPrefs = getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE);
+            boolean requirePin = appPrefs.getBoolean("require_pin", false);
 
             if (requirePin) {
-                String savedPin = prefs.getString("pin_code", "");
+                String savedPin = appPrefs.getString("pin_code", "");
                 showPinConfirmDialog(savedPin);
             } else {
                 cancelTimer();
-                prefs.edit().putBoolean("isBlockingActive", false).apply();
+                appPrefs.edit().putBoolean("isBlockingActive", false).apply();
                 Toast.makeText(this, R.string.timer_cancelled, Toast.LENGTH_SHORT).show();
             }
         });
@@ -139,25 +146,33 @@ public class MainActivity extends BaseActivity {
         spinnerMinutes.setAdapter(minutesAdapter);
 
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override
+            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedHours = Integer.parseInt(hours.get(position));
                 updateTimeLimit();
             }
-            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {
+            }
         });
 
         spinnerMinutes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
+            @Override
+            public void onItemSelected(@NonNull AdapterView<?> parent, @NonNull View view, int position, long id) {
                 selectedMinutes = Integer.parseInt(minutes.get(position));
                 updateTimeLimit();
             }
-            @Override public void onNothingSelected(@NonNull AdapterView<?> parent) {}
+
+            @Override
+            public void onNothingSelected(@NonNull AdapterView<?> parent) {
+            }
         });
     }
 
     // --- Timer ---
     private void startTimerFromManager(Button btnStart) {
-        long remaining = TimerManager.getInstance().getRemaining();
+        long remaining = TimerManager.getInstance(this).getRemaining();
         if (remaining <= 0) {
             tvTimer.setText(R.string.time_up);
             isRunning = false;
@@ -192,12 +207,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                TimerManager.getInstance().cancel();
+                TimerManager.getInstance(MainActivity.this).cancel();
                 tvTimer.setText(R.string.time_up);
                 isRunning = false;
                 btnStart.setEnabled(true);
 
-                // Hoàn thành quest nếu user không cancel
                 gm.completeQuest("no_cancel");
 
                 getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
@@ -208,7 +222,7 @@ public class MainActivity extends BaseActivity {
 
     private void cancelTimer() {
         if (countDownTimer != null) countDownTimer.cancel();
-        TimerManager.getInstance().cancel();
+        TimerManager.getInstance(this).cancel();
         tvTimer.setText(R.string.cancelled);
         isRunning = false;
         findViewById(R.id.btnStart).setEnabled(true);
@@ -250,7 +264,7 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         // Khôi phục timer nếu còn chạy
-        if (TimerManager.getInstance().isRunning()) {
+        if (TimerManager.getInstance(this).isRunning()) {
             startTimerFromManager(findViewById(R.id.btnStart));
         }
     }
