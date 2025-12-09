@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <!-- Rank số -->
+    <TextView
+        android:id="@+id/tvRankNumber"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Avatar -->
+    <ImageView
+        android:id="@+id/imgRankAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/avatar_circle_bg"
+        android:padding="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar1" />
+
+    <!-- Tên + điểm -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvRankName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minh"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRankPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120 điểm"
+            android:textColor="#888"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
