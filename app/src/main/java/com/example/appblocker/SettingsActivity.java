@@ -95,20 +95,60 @@ public class SettingsActivity extends BaseActivity {
     // ============================================================
 
     private void handlePinToggle(boolean enabled) {
-        prefs.edit().putBoolean("require_pin", enabled).apply();
+
+        String pin = prefs.getString("pin_code", "");
 
         if (enabled) {
-            if (prefs.getString("pin_code", "").isEmpty()) {
+            // User bật PIN
+            if (pin.isEmpty()) {
+                // Chưa có PIN → bắt nhập PIN mới
                 showSetNewPinDialog();
             } else {
+                prefs.edit().putBoolean("require_pin", true).apply();
                 Toast.makeText(this, "Đã bật bảo vệ PIN", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(this, "Đã tắt bảo vệ PIN", Toast.LENGTH_SHORT).show();
+            updatePinText();
+            return;
         }
 
+        // ----------------------------------------------------
+        // Trường hợp user muốn TẮT PIN → hỏi PIN để xác minh
+        // ----------------------------------------------------
+        if (!pin.isEmpty()) {
+
+            EditText et = buildEditText("Nhập PIN để tắt", InputType.TYPE_CLASS_NUMBER, 4);
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Xác minh PIN")
+                    .setView(et)
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (d, w) -> {
+                        if (verifyPin(et.getText().toString().trim())) {
+                            prefs.edit().putBoolean("require_pin", false).apply();
+                            Toast.makeText(this, "Đã tắt bảo vệ PIN", Toast.LENGTH_SHORT).show();
+                            switchPin.setChecked(false); // cập nhật UI
+                            updatePinText();
+                        } else {
+                            Toast.makeText(this, "Sai PIN!", Toast.LENGTH_SHORT).show();
+                            switchPin.setChecked(true); // giữ nguyên bật
+                        }
+                    })
+                    .setNegativeButton("Hủy", (d, w) -> {
+                        switchPin.setChecked(true); // nếu bấm hủy → giữ bật
+                    })
+                    .show();
+
+            return;
+        }
+
+        // ----------------------------------------------------
+        // Nếu không có PIN → tắt ngay
+        // ----------------------------------------------------
+        prefs.edit().putBoolean("require_pin", false).apply();
+        Toast.makeText(this, "Đã tắt bảo vệ PIN", Toast.LENGTH_SHORT).show();
         updatePinText();
     }
+
 
     private void updatePinText() {
         boolean enabled = prefs.getBoolean("require_pin", false);
