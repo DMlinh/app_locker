@@ -221,12 +221,19 @@ public class MainActivity extends BaseActivity {
     }
 
     private void cancelTimer() {
-        if (countDownTimer != null) countDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+
         TimerManager.getInstance(this).cancel();
+
         tvTimer.setText(R.string.cancelled);
         isRunning = false;
+
         findViewById(R.id.btnStart).setEnabled(true);
     }
+
 
     private void updateTimeLimit() {
         timeLimit = (selectedHours * 60L + selectedMinutes) * 60 * 1000;
@@ -263,11 +270,16 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Khôi phục timer nếu còn chạy
-        if (TimerManager.getInstance(this).isRunning()) {
+
+        boolean blocking =
+                getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                        .getBoolean("isBlockingActive", false);
+
+        if (blocking && TimerManager.getInstance(this).isRunning()) {
             startTimerFromManager(findViewById(R.id.btnStart));
         }
     }
+
 
     @Override
     public void onDestroy() {
@@ -283,9 +295,24 @@ public class MainActivity extends BaseActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Nhập mã PIN để Cancel")
                 .setView(input)
+                .setCancelable(false)
                 .setPositiveButton("Xác nhận", (dialog, which) -> {
-                    if (input.getText().toString().equals(savedPin)) {
+
+                    if (input.getText().toString().trim().equals(savedPin)) {
+
+                        // 1️⃣ Hủy timer
                         cancelTimer();
+
+                        // 2️⃣ Tắt chế độ chặn
+                        getSharedPreferences("AppBlockerPrefs", MODE_PRIVATE)
+                                .edit()
+                                .putBoolean("isBlockingActive", false)
+                                .apply();
+
+                        Toast.makeText(this,
+                                R.string.timer_cancelled,
+                                Toast.LENGTH_SHORT).show();
+
                     } else {
                         Toast.makeText(this, "Sai mã PIN!", Toast.LENGTH_SHORT).show();
                     }
@@ -293,4 +320,5 @@ public class MainActivity extends BaseActivity {
                 .setNegativeButton("Hủy", null)
                 .show();
     }
+
 }
